@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>card.io — Sign in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;400;500&family=Cairo:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--ink:#0a0a08;--paper:#f7f4ef;--gold:#c9a84c;--gold-lt:#e8c97a;--gold-dk:#9a7a2e;--slate:#1e1e1c;--muted:#7a7870;--border:rgba(10,10,8,0.12);--border-lt:rgba(255,255,255,0.10);--serif:'DM Serif Display',serif;--sans:'DM Sans',sans-serif;--arabic:'Cairo',sans-serif;--error:#e05c5c;--success:#4caf82}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
+body{font-family:var(--sans);min-height:100vh;background:var(--ink);display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+[dir="rtl"] body{font-family:var(--arabic)}
+
+.brand-panel{position:relative;background:var(--ink);display:flex;flex-direction:column;justify-content:space-between;padding:40px;overflow:hidden}
+.brand-panel::before{content:'';position:absolute;top:-40%;left:-20%;width:140%;height:140%;background:radial-gradient(ellipse at 30% 40%,rgba(201,168,76,.18) 0%,transparent 50%),radial-gradient(ellipse at 80% 70%,rgba(201,168,76,.08) 0%,transparent 40%),radial-gradient(ellipse at 60% 10%,rgba(201,168,76,.10) 0%,transparent 35%);animation:meshShift 8s ease-in-out infinite alternate;pointer-events:none}
+@keyframes meshShift{from{transform:scale(1) rotate(0deg)}to{transform:scale(1.08) rotate(3deg)}}
+.brand-panel::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+
+.brand-logo{position:relative;z-index:1;font-family:var(--serif);font-size:26px;color:var(--paper);text-decoration:none;letter-spacing:-.02em}
+.brand-logo em{color:var(--gold);font-style:italic}
+
+.brand-card-preview{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;flex:1}
+.demo-card{width:240px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;animation:demoFloat 5s ease-in-out infinite;backdrop-filter:blur(20px)}
+@keyframes demoFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-16px) rotate(-2deg)}}
+.demo-header{background:linear-gradient(145deg,#1c3d6e,#0d2a50);padding:24px 18px 18px;text-align:center;border-bottom:1px solid rgba(255,255,255,.06)}
+.demo-av{width:52px;height:52px;border-radius:50%;background:rgba(201,168,76,.2);border:2px solid rgba(201,168,76,.35);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-family:var(--serif);font-size:16px;color:var(--gold)}
+.demo-name{font-size:13px;font-weight:500;color:#fff;margin-bottom:2px}
+.demo-role{font-size:10px;color:rgba(255,255,255,.5)}
+.demo-body{padding:12px}
+.demo-link{display:flex;align-items:center;gap:7px;padding:7px 8px;margin-bottom:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:8px;font-size:10px;color:rgba(255,255,255,.6)}
+.demo-link-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.demo-btn{width:100%;margin-top:8px;padding:7px;background:var(--gold);color:var(--ink);border:none;border-radius:8px;font-size:10px;font-weight:500;cursor:default}
+
+.orbit-stat{position:absolute;background:rgba(255,255,255,.06);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;font-size:12px;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.orbit-stat.s1{top:10%;left:0;animation:floatS 6s ease-in-out infinite}
+.orbit-stat.s2{bottom:22%;right:0;animation:floatS 7s ease-in-out infinite -3s;font-size:11px}
+.orbit-stat.s3{bottom:10%;left:5%;animation:floatS 8s ease-in-out infinite -1.5s;font-size:11px}
+@keyframes floatS{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.stat-dot{width:7px;height:7px;border-radius:50%}
+
+.brand-footer{position:relative;z-index:1}
+.brand-tagline{font-family:var(--serif);font-size:28px;line-height:1.2;color:rgba(255,255,255,.85);letter-spacing:-.01em;margin-bottom:10px}
+.brand-tagline em{color:var(--gold);font-style:italic}
+.brand-sub{font-size:13px;color:rgba(255,255,255,.35);font-weight:300;line-height:1.7}
+
+.auth-panel{background:var(--paper);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:48px 56px;overflow-y:auto;position:relative}
+
+.setup-banner{position:absolute;top:0;left:0;right:0;background:linear-gradient(90deg,#1c3d6e,#0d2a50);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.setup-banner-text{font-size:12px;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:8px}
+.setup-banner-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.setup-banner-btn{font-size:11px;font-weight:500;color:var(--gold);background:none;border:1px solid rgba(201,168,76,.4);border-radius:20px;padding:4px 12px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.setup-banner-btn:hover{background:rgba(201,168,76,.15)}
+
+.auth-box{width:100%;max-width:380px;margin-top:40px}
+.auth-mobile-logo{display:none;font-family:var(--serif);font-size:22px;color:var(--ink);margin-bottom:24px;letter-spacing:-.02em}
+.auth-mobile-logo em{color:var(--gold);font-style:italic}
+
+.auth-title{font-family:var(--serif);font-size:32px;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
+.auth-sub{font-size:14px;color:var(--muted);font-weight:300;margin-bottom:32px;line-height:1.6}
+[dir="rtl"] .auth-title,[dir="rtl"] .auth-sub{font-family:var(--arabic)}
+
+.social-btn{width:100%;padding:11px 16px;border:1px solid var(--border);border-radius:12px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-size:14px;color:var(--ink);font-weight:400;transition:all .2s;margin-bottom:10px;font-family:var(--sans)}
+.social-btn:hover{border-color:rgba(10,10,8,.3);background:#fafafa;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+[dir="rtl"] .social-btn{flex-direction:row-reverse;font-family:var(--arabic)}
+
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.field{margin-bottom:14px;position:relative}
+.field-label{display:block;font-size:12px;font-weight:500;color:var(--ink);margin-bottom:6px}
+[dir="rtl"] .field-label{text-align:right;font-family:var(--arabic)}
+.field-input-wrap{position:relative}
+.field-input{width:100%;padding:11px 44px 11px 14px;border:1.5px solid var(--border);border-radius:12px;background:#fff;color:var(--ink);font-size:14px;font-family:var(--sans);transition:all .2s;outline:none}
+.field-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12)}
+.field-input.error{border-color:var(--error);box-shadow:0 0 0 3px rgba(224,92,92,.1)}
+[dir="rtl"] .field-input{text-align:right;font-family:var(--arabic);padding-right:44px;padding-left:14px}
+.field-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:16px;color:var(--muted);cursor:pointer;transition:color .2s;user-select:none}
+[dir="rtl"] .field-icon{right:auto;left:12px}
+.field-icon:hover{color:var(--ink)}
+.field-error{font-size:11px;color:var(--error);margin-top:5px;display:none}
+[dir="rtl"] .field-error{text-align:right;font-family:var(--arabic)}
+.field-error.show{display:block}
+
+.strength-bar{display:flex;gap:4px;margin-top:8px}
+.strength-seg{height:3px;flex:1;border-radius:3px;background:var(--border);transition:background .3s}
+.strength-label{font-size:11px;color:var(--muted);margin-top:4px}
+
+.field-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+[dir="rtl"] .field-row{flex-direction:row-reverse}
+.remember{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted);cursor:pointer}
+[dir="rtl"] .remember{flex-direction:row-reverse;font-family:var(--arabic)}
+.remember input[type=checkbox]{width:16px;height:16px;accent-color:var(--gold);cursor:pointer}
+.forgot-link{font-size:13px;color:var(--gold-dk);text-decoration:none;transition:color .2s;background:none;border:none;cursor:pointer}
+.forgot-link:hover{color:var(--gold)}
+
+.btn-submit{width:100%;padding:13px;background:var(--ink);color:var(--paper);border:none;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;font-family:var(--sans);display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+.btn-submit::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(201,168,76,.15),transparent);transform:translateX(-100%);transition:transform .5s}
+.btn-submit:hover{background:var(--slate);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.15)}
+.btn-submit:hover::before{transform:translateX(100%)}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+[dir="rtl"] .btn-submit{font-family:var(--arabic);flex-direction:row-reverse}
+.btn-spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.auth-switch{text-align:center;margin-top:20px;font-size:13px;color:var(--muted)}
+[dir="rtl"] .auth-switch{font-family:var(--arabic)}
+.auth-switch button{color:var(--gold-dk);font-weight:500;background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:2px;transition:color .2s;font-size:13px;font-family:var(--sans)}
+.auth-switch button:hover{color:var(--gold)}
+
+.terms-text{font-size:11px;color:var(--muted);text-align:center;line-height:1.6;margin-top:16px}
+.terms-text a{color:var(--gold-dk);text-decoration:none}
+.terms-text a:hover{color:var(--gold)}
+[dir="rtl"] .terms-text{font-family:var(--arabic)}
+
+.lang-row{display:flex;justify-content:flex-end;margin-bottom:20px}
+[dir="rtl"] .lang-row{justify-content:flex-start}
+.lang-toggle{display:flex;border:1px solid var(--border);border-radius:20px;overflow:hidden}
+.lang-toggle button{padding:5px 14px;font-size:12px;font-weight:500;background:transparent;border:none;cursor:pointer;color:var(--muted);transition:all .2s}
+.lang-toggle button.active{background:var(--ink);color:var(--paper)}
+.lang-toggle button.ar-lbtn{font-family:var(--arabic)}
+
+.alert{padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none;align-items:flex-start;gap:8px;line-height:1.5}
+.alert.show{display:flex}
+.alert.alert-error{background:rgba(224,92,92,.08);border:1px solid rgba(224,92,92,.2);color:#b33}
+.alert.alert-success{background:rgba(76,175,130,.08);border:1px solid rgba(76,175,130,.2);color:#1a6644}
+.alert.alert-info{background:rgba(28,61,110,.06);border:1px solid rgba(28,61,110,.15);color:#1c3d6e}
+[dir="rtl"] .alert{font-family:var(--arabic);flex-direction:row-reverse;text-align:right}
+
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(10,10,8,.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.setup-modal{background:var(--paper);border-radius:24px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 32px 80px rgba(0,0,0,.25);transform:translateY(20px);transition:transform .3s}
+.modal-overlay.open .setup-modal{transform:translateY(0)}
+.modal-header{padding:24px 28px 16px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--border)}
+.modal-title{font-family:var(--serif);font-size:22px;color:var(--ink)}
+.modal-close{background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);line-height:1;transition:color .2s;padding:4px}
+.modal-close:hover{color:var(--ink)}
+.modal-body{padding:20px 28px 28px}
+.setup-step{display:flex;gap:16px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.setup-step:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.setup-step-num{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0;margin-top:2px}
+.setup-step-body{flex:1}
+.setup-step-title{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:6px}
+.setup-step-desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px}
+.setup-code{background:var(--ink);color:#e8c97a;padding:10px 14px;border-radius:10px;font-family:monospace;font-size:11px;line-height:1.7;overflow-x:auto;position:relative}
+.copy-code-btn{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.08);border:none;border-radius:6px;padding:3px 10px;font-size:10px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s}
+.copy-code-btn:hover{background:rgba(255,255,255,.15);color:#fff}
+.setup-input{width:100%;padding:9px 12px;margin-top:8px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:monospace;color:var(--ink);outline:none;transition:border-color .2s}
+.setup-input:focus{border-color:var(--gold)}
+.modal-save-btn{width:100%;padding:12px;margin-top:20px;background:var(--ink);color:var(--paper);border:none;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;font-family:var(--sans)}
+.modal-save-btn:hover{background:var(--slate)}
+.badge-configured{display:inline-flex;align-items:center;gap:5px;background:rgba(76,175,130,.1);border:1px solid rgba(76,175,130,.25);color:#1a6644;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;margin-top:6px}
+
+.success-screen{display:none;text-align:center;padding:20px 0}
+.success-icon{width:64px;height:64px;border-radius:50%;background:rgba(201,168,76,.1);border:2px solid rgba(201,168,76,.3);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+.success-title{font-family:var(--serif);font-size:26px;color:var(--ink);margin-bottom:8px}
+.success-sub{font-size:14px;color:var(--muted);font-weight:300;line-height:1.7;margin-bottom:24px}
+.btn-go{display:inline-block;padding:12px 32px;background:var(--ink);color:var(--paper);border-radius:40px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s;border:none;cursor:pointer;font-family:var(--sans)}
+.btn-go:hover{background:var(--gold);transform:translateY(-2px)}
+
+.slug-prefix{padding:11px 10px 11px 14px;background:#f0ede7;border:1.5px solid var(--border);border-right:none;border-radius:12px 0 0 12px;font-size:13px;color:var(--muted);white-space:nowrap}
+.slug-input{border-radius:0 12px 12px 0!important;border-left:none!important}
+
+@media(max-width:768px){body{grid-template-columns:1fr}.brand-panel{display:none}.auth-mobile-logo{display:block}.auth-panel{padding:32px 24px}.setup-banner{position:fixed;z-index:50}.auth-box{margin-top:48px}}
+</style>
+</head>
+<body>
+
+<div class="brand-panel">
+  <a href="#" class="brand-logo">card<em>.io</em></a>
+  <div class="brand-card-preview">
+    <div class="orbit-stat s1"><span class="stat-dot" style="background:#22c55e"></span>Live in 90+ countries</div>
+    <div class="orbit-stat s2"><span class="stat-dot" style="background:var(--gold)"></span>312 saves this month</div>
+    <div class="orbit-stat s3"><span class="stat-dot" style="background:#60a5fa"></span>Arabic + English ✓</div>
+    <div class="demo-card">
+      <div class="demo-header">
+        <div class="demo-av">AK</div>
+        <div class="demo-name">Amira Khalil</div>
+        <div class="demo-role">Creative Director · Dubai</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-link"><span class="demo-link-dot" style="background:var(--gold)"></span>amira@studiok.ae</div>
+        <div class="demo-link"><span class="demo-link-dot" style="background:#60a5fa"></span>studiok.ae</div>
+        <div class="demo-link"><span class="demo-link-dot" style="background:#22c55e"></span>+971 50 123 4567</div>
+        <div class="demo-btn">Save contact</div>
+      </div>
+    </div>
+  </div>
+  <div class="brand-footer">
+    <div class="brand-tagline">Your identity,<br><em>one link</em> away</div>
+    <div class="brand-sub">Create your digital business card in 3 minutes. Share via QR, WhatsApp, or link. Works in Arabic &amp; English.</div>
+  </div>
+</div>
+
+<div class="auth-panel">
+  <div class="setup-banner" id="setup-banner">
+    <div class="setup-banner-text">
+      <span class="setup-banner-dot"></span>
+      <span id="banner-msg">Supabase not configured — connect your database to enable real accounts</span>
+    </div>
+    <button class="setup-banner-btn" onclick="openSetup()">Setup guide →</button>
+  </div>
+
+  <div class="auth-box">
+    <div class="auth-mobile-logo">card<em style="color:var(--gold)">.</em>io</div>
+
+    <div class="lang-row">
+      <div class="lang-toggle">
+        <button class="active" onclick="setLang('en')">EN</button>
+        <button class="ar-lbtn" onclick="setLang('ar')">العربية</button>
+      </div>
+    </div>
+
+    <div class="alert" id="alert-box">
+      <span id="alert-icon">⚠️</span>
+      <span id="alert-msg"></span>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="form-login">
+      <h1 class="auth-title" id="login-title">Welcome back</h1>
+      <p class="auth-sub" id="login-sub">Sign in to manage your digital card</p>
+      <button class="social-btn" onclick="signInGoogle()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.34-8.16 2.34-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <span id="google-label">Continue with Google</span>
+      </button>
+      <div class="divider"><span id="divider-label">or sign in with email</span></div>
+      <div class="field">
+        <label class="field-label" id="label-email">Email address</label>
+        <div class="field-input-wrap">
+          <input class="field-input" id="login-email" type="email" autocomplete="email" placeholder="amira@nexova.io" oninput="clearAlert()">
+          <span class="field-icon">✉</span>
+        </div>
+        <div class="field-error" id="login-email-err">Please enter a valid email</div>
+      </div>
+      <div class="field">
+        <label class="field-label" id="label-password">Password</label>
+        <div class="field-input-wrap">
+          <input class="field-input" id="login-password" type="password" autocomplete="current-password" placeholder="••••••••" oninput="clearAlert()">
+          <span class="field-icon" onclick="togglePwd('login-password',this)">👁</span>
+        </div>
+        <div class="field-error" id="login-password-err">Password is required</div>
+      </div>
+      <div class="field-row">
+        <label class="remember"><input type="checkbox" id="remember-me"><span id="remember-label">Remember me</span></label>
+        <button class="forgot-link" onclick="showForm('reset')" id="forgot-label">Forgot password?</button>
+      </div>
+      <button class="btn-submit" id="login-btn" onclick="handleLogin()">
+        <span class="btn-spinner" id="login-spinner"></span>
+        <span id="login-btn-label">Sign in</span>
+      </button>
+      <div class="auth-switch">
+        <span id="switch-label-1">Don't have an account?</span>
+        <button onclick="showForm('signup')" id="switch-btn-1"> Create one free</button>
+      </div>
+    </div>
+
+    <!-- SIGNUP -->
+    <div id="form-signup" style="display:none">
+      <h1 class="auth-title" id="signup-title">Create your card</h1>
+      <p class="auth-sub" id="signup-sub">Free forever. No credit card needed.</p>
+      <button class="social-btn" onclick="signInGoogle()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.34-8.16 2.34-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <span id="google-label-2">Continue with Google</span>
+      </button>
+      <div class="divider"><span id="divider-label-2">or sign up with email</span></div>
+      <div class="field">
+        <label class="field-label" id="signup-label-name">Full name</label>
+        <div class="field-input-wrap">
+          <input class="field-input" id="signup-name" type="text" autocomplete="name" placeholder="Amira Ben Salah" oninput="clearAlert()">
+          <span class="field-icon">👤</span>
+        </div>
+        <div class="field-error" id="signup-name-err">Name is required</div>
+      </div>
+      <div class="field">
+        <label class="field-label" id="signup-label-email">Email address</label>
+        <div class="field-input-wrap">
+          <input class="field-input" id="signup-email" type="email" autocomplete="email" placeholder="amira@nexova.io" oninput="clearAlert()">
+          <span class="field-icon">✉</span>
+        </div>
+        <div class="field-error" id="signup-email-err">Please enter a valid email</div>
+      </div>
+      <div class="field">
+        <label class="field-label" id="signup-label-pwd">Password</label>
+        <div class="field-input-wrap">
+          <input class="field-input" id="signup-password" type="password" autocomplete="new-password" placeholder="Min. 8 characters" oninput="checkStrength();clearAlert()">
+          <span class="field-icon" onclick="togglePwd('signup-password',this)">👁</span>
+        </div>
+        <div class="strength-bar"><div class="strength-seg" id="str1"></div><div class="strength-seg" id="str2"></div><div class="strength-seg" id="str3"></div><div class="strength-seg" id="str4"></div></div>
+        <div class="strength-label" id="strength-label"></div>
+        <div class="field-error" id="signup-pwd-err">Password must be at least 8 characters</div>
+      </div>
+      <div class="field" style="margin-bottom:20px">
+        <label class="field-label" id="signup-label-slug">Your card URL</label>
+        <div class="field-input-wrap" style="display:flex;align-items:center">
+          <span class="slug-prefix">card.io/</span>
+          <input class="field-input slug-input" id="signup-slug" type="text" placeholder="yourname" oninput="validateSlug();clearAlert()">
+        </div>
+        <div class="field-error" id="signup-slug-err">Only letters, numbers, dots and dashes</div>
+      </div>
+      <button class="btn-submit" id="signup-btn" onclick="handleSignup()">
+        <span class="btn-spinner" id="signup-spinner"></span>
+        <span id="signup-btn-label">Create free account</span>
+      </button>
+      <div class="auth-switch">
+        <span id="switch-label-2">Already have an account?</span>
+        <button onclick="showForm('login')" id="switch-btn-2"> Sign in</button>
+      </div>
+      <div class="terms-text" id="terms-txt">By signing up you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</div>
+    </div>
+
+    <!-- RESET -->
+    <div id="form-reset" style="display:none">
+      <h1 class="auth-title" id="reset-title">Reset password</h1>
+      <p class="auth-sub" id="reset-sub">Enter your email and we'll send a reset link</p>
+      <div class="field">
+        <label class="field-label" id="reset-label-email">Email address</label>
+        <div class="field-input-wrap">
+          <input class="field-input" id="reset-email" type="email" placeholder="amira@nexova.io">
+          <span class="field-icon">✉</span>
+        </div>
+        <div class="field-error" id="reset-email-err">Please enter a valid email</div>
+      </div>
+      <button class="btn-submit" id="reset-btn" onclick="handleReset()">
+        <span class="btn-spinner" id="reset-spinner"></span>
+        <span id="reset-btn-label">Send reset link</span>
+      </button>
+      <div class="auth-switch">
+        <button onclick="showForm('login')" style="color:var(--gold-dk);background:none;border:none;cursor:pointer;font-size:13px">← Back to sign in</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="success-screen">
+      <div class="success-icon">🎉</div>
+      <div class="success-title" id="success-title">You're in!</div>
+      <div class="success-sub" id="success-sub">Your account is ready. Let's build your card.</div>
+      <button class="btn-go" onclick="goToApp()" id="success-btn">Go to my card editor →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETUP MODAL -->
+<div class="modal-overlay" id="setup-modal-overlay" onclick="closeSetupOnBg(event)">
+  <div class="setup-modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Connect Supabase</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:3px">5-minute setup — free forever</div>
+      </div>
+      <button class="modal-close" onclick="closeSetup()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="setup-step">
+        <div class="setup-step-num">1</div>
+        <div class="setup-step-body">
+          <div class="setup-step-title">Create a free Supabase project</div>
+          <div class="setup-step-desc">Go to supabase.com, sign up with GitHub, create a new project. Choose Frankfurt region for MENA users.</div>
+          <a href="https://supabase.com" target="_blank" style="color:var(--gold-dk);font-size:13px;font-weight:500">Open Supabase.com ↗</a>
+        </div>
+      </div>
+      <div class="setup-step">
+        <div class="setup-step-num">2</div>
+        <div class="setup-step-body">
+          <div class="setup-step-title">Run this SQL in Supabase → SQL Editor</div>
+          <div class="setup-code" style="position:relative">
+            <button class="copy-code-btn" onclick="copySQL(this)">Copy</button>
+            <pre id="sql-block">-- Profiles table
+CREATE TABLE profiles (
+  id UUID REFERENCES auth.users PRIMARY KEY,
+  full_name TEXT, avatar_url TEXT,
+  locale TEXT DEFAULT 'en',
+  plan TEXT DEFAULT 'free',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Cards table
+CREATE TABLE cards (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  slug TEXT UNIQUE NOT NULL,
+  name_en TEXT, name_ar TEXT,
+  title_en TEXT, title_ar TEXT,
+  company_en TEXT, company_ar TEXT,
+  bio_en TEXT, bio_ar TEXT,
+  location TEXT, theme_index INT DEFAULT 0,
+  is_published BOOLEAN DEFAULT false,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Links on each card
+CREATE TABLE card_links (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  card_id UUID REFERENCES cards(id) ON DELETE CASCADE,
+  type TEXT, value TEXT, sort_order INT DEFAULT 0
+);
+
+-- Analytics: views
+CREATE TABLE card_views (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  card_id UUID REFERENCES cards(id) ON DELETE CASCADE,
+  country TEXT, device TEXT,
+  viewed_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Analytics: leads
+CREATE TABLE leads (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  card_id UUID REFERENCES cards(id) ON DELETE CASCADE,
+  visitor_name TEXT, visitor_email TEXT,
+  captured_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Auto-create profile on signup
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO profiles (id, full_name)
+  VALUES (NEW.id, NEW.raw_user_meta_data->>'full_name');
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION handle_new_user();</pre>
+          </div>
+        </div>
+      </div>
+      <div class="setup-step">
+        <div class="setup-step-num">3</div>
+        <div class="setup-step-body">
+          <div class="setup-step-title">Paste your Supabase credentials</div>
+          <div class="setup-step-desc">Go to <strong>Project Settings → API</strong> in Supabase. Copy Project URL and anon public key:</div>
+          <input class="setup-input" id="setup-url" placeholder="https://xxxxxxxxxxxx.supabase.co" oninput="validateSetup()">
+          <input class="setup-input" id="setup-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." style="font-size:11px" oninput="validateSetup()">
+          <div id="setup-configured" class="badge-configured" style="display:none">✓ Connected</div>
+        </div>
+      </div>
+      <div class="setup-step">
+        <div class="setup-step-num">4</div>
+        <div class="setup-step-body">
+          <div class="setup-step-title">Enable Google login (optional)</div>
+          <div class="setup-step-desc">In Supabase go to <strong>Authentication → Providers → Google</strong> and toggle it on. Create OAuth credentials free at <a href="https://console.cloud.google.com" target="_blank" style="color:var(--gold-dk)">console.cloud.google.com</a>.</div>
+        </div>
+      </div>
+      <button class="modal-save-btn" onclick="saveSupabaseConfig()">Save &amp; connect database</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+let supabase=null,currentLang='en',currentForm='login';
+const SUPABASE_URL='https://gfqhweetningrqycnsab.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmcWh3ZWV0bmluZ3JxeWNuc2FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NjcyMzAsImV4cCI6MjA5NDU0MzIzMH0.WRLKO7yVmVzq9NHMNaK-ac7kdoPek2t6ENajKugB4mY';
+const SB_URL='cardio_sb_url',SB_KEY='cardio_sb_key';
+
+const T={
+  en:{loginTitle:'Welcome back',loginSub:'Sign in to manage your digital card',signupTitle:'Create your card',signupSub:'Free forever. No credit card needed.',resetTitle:'Reset password',resetSub:"Enter your email and we'll send a reset link",labelEmail:'Email address',labelPwd:'Password',labelName:'Full name',labelSlug:'Your card URL',remember:'Remember me',forgot:'Forgot password?',loginBtn:'Sign in',signupBtn:'Create free account',resetBtn:'Send reset link',google:'Continue with Google',divider:'or sign in with email',divider2:'or sign up with email',switch1:"Don't have an account?",switchBtn1:' Create one free',switch2:'Already have an account?',switchBtn2:' Sign in',terms:'By signing up you agree to our Terms of Service and Privacy Policy.',successTitle:"You're in!",successSub:"Your account is ready. Let's build your card.",successBtn:'Go to my card editor →'},
+  ar:{loginTitle:'مرحباً بعودتك',loginSub:'سجّل دخولك لإدارة بطاقتك الرقمية',signupTitle:'أنشئ بطاقتك',signupSub:'مجاني للأبد. لا حاجة لبطاقة ائتمانية.',resetTitle:'إعادة تعيين كلمة المرور',resetSub:'أدخل بريدك الإلكتروني وسنرسل لك رابط الاستعادة',labelEmail:'البريد الإلكتروني',labelPwd:'كلمة المرور',labelName:'الاسم الكامل',labelSlug:'رابط بطاقتك',remember:'تذكّرني',forgot:'نسيت كلمة المرور؟',loginBtn:'تسجيل الدخول',signupBtn:'إنشاء حساب مجاني',resetBtn:'إرسال رابط الاستعادة',google:'المتابعة عبر جوجل',divider:'أو سجّل الدخول بالبريد',divider2:'أو أنشئ حساباً بالبريد',switch1:'ليس لديك حساب؟',switchBtn1:' أنشئ واحداً مجاناً',switch2:'لديك حساب بالفعل؟',switchBtn2:' سجّل دخولك',terms:'بالتسجيل، أنت توافق على شروط الخدمة وسياسة الخصوصية.',successTitle:'!أهلاً بك',successSub:'حسابك جاهز. لنبني بطاقتك الآن.',successBtn:'← الذهاب إلى محرر البطاقة'}
+};
+
+function initSupabase(){
+  const url=SUPABASE_URL,key=SUPABASE_ANON_KEY;
+  if(url&&key){
+    try{
+      supabase=window.supabase.createClient(url,key);
+      document.getElementById('setup-banner').style.background='linear-gradient(90deg,#0f4a1e,#0a3015)';
+      document.getElementById('banner-msg').textContent='✓ Supabase connected — real accounts enabled';
+      document.getElementById('setup-url').value=url;
+      document.getElementById('setup-key').value=key;
+      document.getElementById('setup-configured').style.display='inline-flex';
+    }catch(e){console.error(e)}
+  }
+}
+
+function setLang(lang){
+  currentLang=lang;
+  document.documentElement.setAttribute('lang',lang);
+  document.documentElement.setAttribute('dir',lang==='ar'?'rtl':'ltr');
+  document.querySelectorAll('.lang-toggle button').forEach((b,i)=>{
+    b.classList.toggle('active',(i===0&&lang==='en')||(i===1&&lang==='ar'));
+  });
+  applyT();
+}
+
+function applyT(){
+  const t=T[currentLang];
+  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  s('login-title',t.loginTitle);s('login-sub',t.loginSub);
+  s('signup-title',t.signupTitle);s('signup-sub',t.signupSub);
+  s('reset-title',t.resetTitle);s('reset-sub',t.resetSub);
+  s('label-email',t.labelEmail);s('label-password',t.labelPwd);
+  s('signup-label-name',t.labelName);s('signup-label-email',t.labelEmail);
+  s('signup-label-pwd',t.labelPwd);s('signup-label-slug',t.labelSlug);
+  s('reset-label-email',t.labelEmail);s('remember-label',t.remember);
+  s('forgot-label',t.forgot);s('login-btn-label',t.loginBtn);
+  s('signup-btn-label',t.signupBtn);s('reset-btn-label',t.resetBtn);
+  s('google-label',t.google);s('google-label-2',t.google);
+  s('divider-label',t.divider);s('divider-label-2',t.divider2);
+  s('switch-label-1',t.switch1);s('switch-btn-1',t.switchBtn1);
+  s('switch-label-2',t.switch2);s('switch-btn-2',t.switchBtn2);
+  s('terms-txt',t.terms);s('success-title',t.successTitle);
+  s('success-sub',t.successSub);s('success-btn',t.successBtn);
+}
+
+function showForm(n){
+  currentForm=n;
+  ['login','signup','reset'].forEach(f=>document.getElementById('form-'+f).style.display=f===n?'block':'none');
+  document.getElementById('success-screen').style.display='none';
+  clearAlert();
+}
+
+function isEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
+function isSlug(v){return /^[a-zA-Z0-9._-]+$/.test(v)}
+
+function setErr(iId,eId,show){
+  const i=document.getElementById(iId),e=document.getElementById(eId);
+  if(i)i.classList.toggle('error',show);
+  if(e)e.classList.toggle('show',show);
+  return !show;
+}
+
+function validateSlug(){
+  const v=document.getElementById('signup-slug')?.value||'';
+  if(v.length>0&&!isSlug(v))setErr('signup-slug','signup-slug-err',true);
+  else setErr('signup-slug','signup-slug-err',false);
+}
+
+function checkStrength(){
+  const p=document.getElementById('signup-password')?.value||'';
+  let s=0;
+  if(p.length>=8)s++;if(/[A-Z]/.test(p))s++;if(/[0-9]/.test(p))s++;if(/[^A-Za-z0-9]/.test(p))s++;
+  const c=['','#e05c5c','#f59e0b','#4caf82','#185FA5'];
+  const l={en:['','Weak','Fair','Good','Strong'],ar:['','ضعيفة','مقبولة','جيدة','قوية']};
+  for(let i=1;i<=4;i++){const seg=document.getElementById('str'+i);if(seg)seg.style.background=i<=s?c[s]:'var(--border)'}
+  const lbl=document.getElementById('strength-label');if(lbl)lbl.textContent=p.length?(l[currentLang][s]||''):'';
+}
+
+function togglePwd(id,el){
+  const i=document.getElementById(id);if(!i)return;
+  i.type=i.type==='password'?'text':'password';
+  el.textContent=i.type==='password'?'👁':'🙈';
+}
+
+function setLoading(f,on){
+  const b=document.getElementById(f+'-btn'),s=document.getElementById(f+'-spinner');
+  if(b)b.disabled=on;if(s)s.style.display=on?'block':'none';
+}
+
+function showAlert(msg,type='error'){
+  const b=document.getElementById('alert-box'),m=document.getElementById('alert-msg'),i=document.getElementById('alert-icon');
+  b.className='alert show alert-'+type;
+  m.textContent=msg;
+  i.textContent=type==='error'?'⚠️':type==='success'?'✓':'ℹ️';
+}
+function clearAlert(){document.getElementById('alert-box').classList.remove('show')}
+
+async function handleLogin(){
+  clearAlert();
+  const email=document.getElementById('login-email')?.value.trim();
+  const password=document.getElementById('login-password')?.value;
+  let ok=true;
+  if(!isEmail(email)){setErr('login-email','login-email-err',true);ok=false;}else setErr('login-email','login-email-err',false);
+  if(!password){setErr('login-password','login-password-err',true);ok=false;}else setErr('login-password','login-password-err',false);
+  if(!ok)return;
+  if(!supabase){showDemoSuccess('login',email);return;}
+  setLoading('login',true);
+  try{
+    const{data,error}=await supabase.auth.signInWithPassword({email,password});
+    if(error)throw error;
+    if(data.session){
+      localStorage.setItem('cardio_session', JSON.stringify(data.session));
+    }
+    showSuccess();
+  }catch(e){
+    showAlert(e.message.includes('Invalid')?
+      (currentLang==='ar'?'البريد أو كلمة المرور غير صحيحة':'Wrong email or password. Try again.'):e.message);
+  }finally{setLoading('login',false)}
+}
+
+async function handleSignup(){
+  clearAlert();
+  const name=document.getElementById('signup-name')?.value.trim();
+  const email=document.getElementById('signup-email')?.value.trim();
+  const password=document.getElementById('signup-password')?.value;
+  const slug=document.getElementById('signup-slug')?.value.trim();
+  let ok=true;
+  if(!name){setErr('signup-name','signup-name-err',true);ok=false;}else setErr('signup-name','signup-name-err',false);
+  if(!isEmail(email)){setErr('signup-email','signup-email-err',true);ok=false;}else setErr('signup-email','signup-email-err',false);
+  if(password.length<8){setErr('signup-password','signup-pwd-err',true);ok=false;}else setErr('signup-password','signup-pwd-err',false);
+  if(!slug||!isSlug(slug)){setErr('signup-slug','signup-slug-err',true);ok=false;}else setErr('signup-slug','signup-slug-err',false);
+  if(!ok)return;
+  if(!supabase){showDemoSuccess('signup',email);return;}
+  setLoading('signup',true);
+  try{
+    const{data,error}=await supabase.auth.signUp({email,password,options:{data:{full_name:name}}});
+    if(error)throw error;
+    if(data.user){
+      await supabase.from('cards').insert({user_id:data.user.id,slug,name_en:name,is_published:false});
+    }
+    if(data.session){
+      localStorage.setItem('cardio_session', JSON.stringify(data.session));
+    }
+    showAlert(currentLang==='ar'?'تم إنشاء حسابك! تحقق من بريدك للتأكيد.':'Account created! Check your email to confirm.','success');
+    setTimeout(showSuccess,1500);
+  }catch(e){
+    showAlert(e.message.includes('already')?
+      (currentLang==='ar'?'هذا البريد مسجّل بالفعل':'This email is already registered.'):e.message);
+  }finally{setLoading('signup',false)}
+}
+
+async function handleReset(){
+  clearAlert();
+  const email=document.getElementById('reset-email')?.value.trim();
+  if(!isEmail(email)){setErr('reset-email','reset-email-err',true);return;}
+  setErr('reset-email','reset-email-err',false);
+  if(!supabase){showAlert(currentLang==='ar'?'تمّ إرسال الرابط! (وضع التجربة)':'Reset link sent! (Demo mode)','success');return;}
+  setLoading('reset',true);
+  try{
+    const{error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+'/update-password'});
+    if(error)throw error;
+    showAlert(currentLang==='ar'?'تم إرسال رابط الاستعادة!':'Reset link sent! Check your inbox.','success');
+  }catch(e){showAlert(e.message)}
+  finally{setLoading('reset',false)}
+}
+
+async function signInGoogle(){
+  showAlert(
+    currentLang==='ar'
+      ? 'سيتوفر تسجيل الدخول عبر جوجل قريباً. استخدم البريد الإلكتروني الآن.'
+      : 'Google login coming soon. Please use email & password for now.',
+    'info'
+  );
+}
+
+function showDemoSuccess(type,email){
+  showAlert(type==='signup'?
+    (currentLang==='ar'?`✓ وضع التجربة: حساب وهمي لـ ${email}`:`✓ Demo: account simulated for ${email}. Connect Supabase for real accounts.`):
+    (currentLang==='ar'?'✓ مرحباً! (وضع التجربة)':'✓ Welcome back! (Demo mode)'),'success');
+  setTimeout(showSuccess,1200);
+}
+
+function showSuccess(){
+  ['form-login','form-signup','form-reset'].forEach(f=>document.getElementById(f).style.display='none');
+  document.getElementById('success-screen').style.display='block';
+  applyT();
+}
+
+function goToApp(){
+  showAlert(currentLang==='ar'?'افتح ملف cardio-app.html للانتقال إلى المحرر!':'Open cardio-app.html to go to your card editor!','info');
+}
+
+function openSetup(){document.getElementById('setup-modal-overlay').classList.add('open')}
+function closeSetup(){document.getElementById('setup-modal-overlay').classList.remove('open')}
+function closeSetupOnBg(e){if(e.target===document.getElementById('setup-modal-overlay'))closeSetup()}
+
+function validateSetup(){
+  const url=document.getElementById('setup-url')?.value.trim(),key=document.getElementById('setup-key')?.value.trim();
+  const btn=document.getElementById('modal-save-btn');
+  if(btn)btn.style.opacity=(url&&key)?'1':'0.5';
+}
+
+function saveSupabaseConfig(){
+  const url=document.getElementById('setup-url')?.value.trim();
+  const key=document.getElementById('setup-key')?.value.trim();
+  console.log('URL value:', url);
+  console.log('KEY starts with:', key ? key.substring(0,20) : 'EMPTY');
+  console.log('URL length:', url ? url.length : 0);
+  console.log('KEY length:', key ? key.length : 0);
+  if(!url||!key){
+    alert('Please fill in both fields. URL and Key cannot be empty.');
+    return;
+  }
+  if(!url.startsWith('https://')){
+    alert('URL must start with https://  —  you have: ' + url.substring(0,30));
+    return;
+  }
+  if(!url.includes('supabase.co')){
+    alert('URL must contain supabase.co  —  you have: ' + url.substring(0,40));
+    return;
+  }
+  if(!key.startsWith('eyJ')){
+    alert('The anon key must start with eyJ  —  yours starts with: ' + key.substring(0,10));
+    return;
+  }
+  try {
+    localStorage.setItem(SB_URL, url);
+    localStorage.setItem(SB_KEY, key);
+    console.log('Saved to localStorage OK');
+    const result = initSupabase();
+    console.log('initSupabase result:', result);
+    document.getElementById('setup-configured').style.display='inline-flex';
+    alert('✓ Connected successfully! The banner will turn green.');
+    setTimeout(closeSetup, 500);
+  } catch(err) {
+    console.error('Save error:', err);
+    alert('Error: ' + err.message);
+  }
+}
+
+function copySQL(btn){
+  navigator.clipboard.writeText(document.getElementById('sql-block').textContent);
+  btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',2000);
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')closeSetup();
+  if(e.key==='Enter'&&!e.shiftKey){
+    if(currentForm==='login')handleLogin();
+    else if(currentForm==='signup')handleSignup();
+    else if(currentForm==='reset')handleReset();
+  }
+});
+
+// Expose all onclick-called functions to global window scope
+window.openSetup     = openSetup;
+window.closeSetup    = closeSetup;
+window.closeSetupOnBg= closeSetupOnBg;
+window.setLang       = setLang;
+window.showForm      = showForm;
+window.handleLogin   = handleLogin;
+window.handleSignup  = handleSignup;
+window.handleReset   = handleReset;
+window.signInGoogle  = signInGoogle;
+window.togglePwd     = togglePwd;
+window.validateSlug  = validateSlug;
+window.checkStrength = checkStrength;
+window.clearAlert    = clearAlert;
+window.goToApp       = goToApp;
+window.saveSupabaseConfig = saveSupabaseConfig;
+window.validateSetup = validateSetup;
+window.copySQL       = copySQL;
+
+initSupabase();
+applyT();
+}); // end DOMContentLoaded
+</script>
+</body>
+</html>
