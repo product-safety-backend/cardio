@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card.io — Your identity, one link</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0d0b;
+    --paper: #f5f2ec;
+    --card-bg: #1a1a18;
+    --accent: #d4621a;
+    --accent-light: #f0956a;
+    --muted: #7a7870;
+    --border: rgba(13,13,11,0.1);
+    --serif: 'DM Serif Display', serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(245,242,236,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: var(--serif); font-size: 22px; color: var(--ink);
+    text-decoration: none; letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--accent); font-style: italic; }
+  nav ul { list-style: none; display: flex; gap: 32px; }
+  nav ul a { font-size: 14px; color: var(--muted); text-decoration: none; font-weight: 400; transition: color .2s; }
+  nav ul a:hover { color: var(--ink); }
+  .nav-cta {
+    background: var(--ink); color: var(--paper);
+    padding: 9px 22px; border-radius: 40px;
+    font-size: 13px; font-weight: 500; text-decoration: none;
+    transition: background .2s, transform .15s;
+  }
+  .nav-cta:hover { background: var(--accent); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 48px 80px;
+    gap: 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,98,26,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 500; color: var(--accent);
+    text-transform: uppercase; letter-spacing: .1em;
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 24px; height: 1px; background: var(--accent);
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(42px, 5vw, 68px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    color: var(--ink);
+  }
+  h1 em { color: var(--accent); font-style: italic; }
+  .hero-sub {
+    font-size: 17px; color: var(--muted); line-height: 1.7;
+    max-width: 420px; margin-bottom: 40px; font-weight: 300;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--ink); color: var(--paper);
+    padding: 14px 32px; border-radius: 40px;
+    font-size: 15px; font-weight: 500; text-decoration: none;
+    transition: background .2s, transform .15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+  .btn-ghost {
+    font-size: 14px; color: var(--muted); text-decoration: none;
+    display: flex; align-items: center; gap: 6px;
+    transition: color .2s;
+  }
+  .btn-ghost:hover { color: var(--ink); }
+  .btn-ghost::after { content: '→'; }
+  .hero-trust {
+    margin-top: 48px; display: flex; align-items: center; gap: 12px;
+    font-size: 13px; color: var(--muted);
+  }
+  .trust-avatars {
+    display: flex;
+  }
+  .trust-avatars span {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 2px solid var(--paper);
+    margin-left: -8px; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500; color: var(--paper);
+  }
+  .trust-avatars span:first-child { margin-left: 0; }
+
+  /* CARD PREVIEW (hero right) */
+  .hero-visual {
+    display: flex; justify-content: center; align-items: center;
+    position: relative;
+  }
+  .floating-card {
+    width: 260px;
+    background: var(--card-bg);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.22), 0 8px 24px rgba(0,0,0,0.12);
+    animation: float 4s ease-in-out infinite;
+    position: relative; z-index: 2;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(-1deg); }
+    50% { transform: translateY(-12px) rotate(-1deg); }
+  }
+  .fc-header {
+    background: linear-gradient(145deg, #1e3a5f 0%, #0c447c 100%);
+    padding: 28px 20px 20px; text-align: center;
+  }
+  .fc-avatar {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: rgba(181,212,244,0.25);
+    border: 2px solid rgba(255,255,255,0.2);
+    margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 20px; color: #B5D4F4;
+  }
+  .fc-name { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 2px; }
+  .fc-role { font-size: 11px; color: rgba(255,255,255,0.6); }
+  .fc-body { padding: 14px; background: #1a1a18; }
+  .fc-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; margin-bottom: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    font-size: 11px; color: rgba(255,255,255,0.75);
+  }
+  .fc-link-icon { font-size: 13px; color: rgba(255,255,255,0.4); }
+  .fc-actions { display: flex; gap: 6px; margin-top: 10px; }
+  .fc-btn {
+    flex: 1; padding: 8px 0;
+    border-radius: 10px; font-size: 11px; font-weight: 500;
+    text-align: center; cursor: pointer;
+  }
+  .fc-save { background: #185FA5; color: #fff; border: none; }
+  .fc-share { background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); }
+  .fc-qr {
+    margin-top: 10px; padding-top: 10px;
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .qr-icon { width: 36px; height: 36px; background: rgba(255,255,255,0.06); border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size:22px; color:rgba(255,255,255,0.5); }
+  .fc-qr-text { font-size: 10px; color: rgba(255,255,255,0.4); line-height: 1.4; }
+
+  /* Floating badges */
+  .badge-float {
+    position: absolute;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 12px; font-weight: 500; color: var(--ink);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    animation: float2 5s ease-in-out infinite;
+  }
+  .badge-float.b1 { top: 10%; left: -10%; animation-delay: -1s; }
+  .badge-float.b2 { bottom: 20%; right: -8%; animation-delay: -2.5s; font-size:11px; }
+  @keyframes float2 {
+    0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)}
+  }
+  .badge-float .bdot { width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px; }
+
+  /* LOGOS */
+  .logos {
+    background: var(--ink); color: rgba(255,255,255,0.4);
+    padding: 28px 48px;
+    display: flex; align-items: center; gap: 48px;
+    overflow: hidden;
+  }
+  .logos-label { font-size: 12px; white-space: nowrap; letter-spacing:.05em; text-transform:uppercase; }
+  .logos-scroll { display: flex; gap: 48px; animation: scroll 20s linear infinite; }
+  @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .logos-scroll span { font-family: var(--serif); font-size: 18px; white-space: nowrap; opacity: .5; }
+
+  /* HOW IT WORKS */
+  .section { padding: 96px 48px; }
+  .section-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--accent); font-weight: 500; margin-bottom: 12px;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 50px);
+    letter-spacing: -0.02em; line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .section-sub { font-size: 17px; color: var(--muted); font-weight: 300; line-height: 1.7; max-width: 500px; margin-bottom: 56px; }
+
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .step { position: relative; }
+  .step-num {
+    font-family: var(--serif); font-size: 64px; color: rgba(13,13,11,0.05);
+    line-height: 1; margin-bottom: -16px; display: block;
+  }
+  .step-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--ink); color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 16px;
+  }
+  .step h3 { font-family: var(--serif); font-size: 22px; margin-bottom: 8px; }
+  .step p { font-size: 14px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+  /* FEATURES BENTO */
+  .bento { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto; gap: 16px; }
+  .bento-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .bento-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); }
+  .bento-card.wide { grid-column: span 2; background: var(--ink); color: var(--paper); }
+  .bento-card.tall { grid-row: span 2; }
+  .bento-card.accent-bg { background: var(--accent); color: #fff; }
+  .bento-icon { font-size: 28px; margin-bottom: 16px; display: block; }
+  .bento-card h3 { font-family: var(--serif); font-size: 22px; margin-bottom: 8px; }
+  .bento-card p { font-size: 13px; line-height: 1.7; font-weight: 300; opacity: .75; }
+  .bento-card.wide p, .bento-card.accent-bg p { opacity: .8; }
+  .bento-stat { font-family: var(--serif); font-size: 48px; margin-bottom: 4px; }
+
+  /* PRICING */
+  .pricing { background: var(--ink); color: var(--paper); padding: 96px 48px; }
+  .pricing h2 { color: var(--paper); }
+  .pricing .section-sub { color: rgba(255,255,255,0.5); }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+  .plan {
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 28px;
+    transition: border-color .2s;
+  }
+  .plan:hover { border-color: rgba(255,255,255,0.25); }
+  .plan.featured { background: var(--accent); border-color: var(--accent); }
+  .plan-name { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; opacity: .6; margin-bottom: 16px; font-weight: 500; }
+  .plan-price { font-family: var(--serif); font-size: 42px; margin-bottom: 4px; }
+  .plan-per { font-size: 13px; opacity: .6; margin-bottom: 24px; font-weight: 300; }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .plan-features li { font-size: 13px; font-weight: 300; display: flex; align-items: center; gap: 8px; }
+  .plan-features li::before { content: '✓'; font-size: 12px; opacity: .7; }
+  .plan-btn {
+    width: 100%; padding: 12px; border-radius: 40px;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: transparent; color: var(--paper);
+    transition: background .2s, border-color .2s;
+  }
+  .plan-btn:hover { background: rgba(255,255,255,0.1); }
+  .plan.featured .plan-btn { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .plan.featured .plan-btn:hover { background: #000; }
+
+  /* TESTIMONIALS */
+  .testimonials { padding: 96px 48px; }
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 48px; }
+  .testi {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 20px; padding: 24px;
+  }
+  .testi-stars { color: var(--accent); font-size: 14px; margin-bottom: 12px; letter-spacing: 2px; }
+  .testi-quote { font-size: 14px; line-height: 1.75; color: var(--ink); font-weight: 300; margin-bottom: 16px; font-family: var(--serif); font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 10px; }
+  .testi-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: var(--paper); }
+  .testi-name { font-size: 13px; font-weight: 500; }
+  .testi-title { font-size: 11px; color: var(--muted); }
+
+  /* CTA */
+  .cta-section {
+    padding: 96px 48px; text-align: center;
+    background: var(--paper);
+    border-top: 1px solid var(--border);
+  }
+  .cta-section h2 { max-width: 560px; margin: 0 auto 24px; }
+  .cta-section p { font-size: 17px; color: var(--muted); font-weight: 300; margin-bottom: 40px; }
+  .cta-input-row {
+    display: flex; align-items: center; gap: 0;
+    max-width: 420px; margin: 0 auto;
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 40px; overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  }
+  .cta-input-row span { padding: 0 12px 0 20px; font-size: 14px; color: var(--muted); white-space: nowrap; }
+  .cta-input-row input {
+    flex: 1; border: none; outline: none;
+    font-size: 14px; font-family: var(--sans);
+    padding: 14px 0; background: transparent; color: var(--ink);
+  }
+  .cta-input-row button {
+    background: var(--ink); color: var(--paper);
+    border: none; padding: 14px 24px;
+    font-size: 14px; font-weight: 500;
+    cursor: pointer; font-family: var(--sans);
+    transition: background .2s;
+    white-space: nowrap;
+  }
+  .cta-input-row button:hover { background: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink); color: rgba(255,255,255,0.4);
+    padding: 48px; display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px;
+  }
+  footer .logo { color: rgba(255,255,255,0.7); }
+  footer ul { list-style: none; display: flex; gap: 24px; }
+  footer ul a { color: rgba(255,255,255,0.4); text-decoration: none; transition: color .2s; }
+  footer ul a:hover { color: rgba(255,255,255,0.8); }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    nav ul { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 100px 20px 60px; }
+    .hero-visual { display: none; }
+    .section, .pricing, .testimonials, .cta-section { padding: 64px 20px; }
+    .steps, .bento, .plans, .testi-grid { grid-template-columns: 1fr; }
+    .bento-card.wide { grid-column: span 1; }
+    footer { flex-direction: column; gap: 20px; text-align: center; padding: 32px 20px; }
+    footer ul { flex-wrap: wrap; justify-content: center; }
+    .logos { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">card<span>.io</span></a>
+  <ul>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#testimonials">Stories</a></li>
+  </ul>
+  <a href="cardio-auth.html" class="nav-cta">Claim your card</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">The future of networking</div>
+    <h1>Your identity,<br><em>one link</em> away</h1>
+    <p class="hero-sub">One smart link replaces every paper card you've ever handed out. Update it once — everyone who has your link sees it instantly.</p>
+    <div class="hero-actions">
+      <a href="cardio-auth.html" class="btn-primary">Claim card.io/yourname</a>
+      <a href="#how" class="btn-ghost">See how it works</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-avatars">
+        <span style="background:#185FA5">AK</span>
+        <span style="background:#3B6D11">MB</span>
+        <span style="background:#854F0B">SR</span>
+        <span style="background:#993556">TN</span>
+      </div>
+      <span>Trusted by <strong>40,000+</strong> professionals in 90 countries</span>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="badge-float b1">
+      <span class="bdot" style="background:#22c55e"></span>312 saves this month
+    </div>
+    <div class="floating-card">
+      <div class="fc-header">
+        <div class="fc-avatar">AK</div>
+        <div class="fc-name">Amira Khalil</div>
+        <div class="fc-role">Creative Director · Dubai</div>
+      </div>
+      <div class="fc-body">
+        <div class="fc-link"><span class="fc-link-icon">✉</span> amira@studio-k.ae</div>
+        <div class="fc-link"><span class="fc-link-icon">◎</span> studio-k.ae</div>
+        <div class="fc-link"><span class="fc-link-icon">in</span> in/amira-khalil</div>
+        <div class="fc-actions">
+          <button class="fc-btn fc-save">Save contact</button>
+          <button class="fc-btn fc-share">Share</button>
+        </div>
+        <div class="fc-qr">
+          <div class="qr-icon">⊞</div>
+          <div class="fc-qr-text">Scan to open<br>card.io/amira</div>
+        </div>
+      </div>
+    </div>
+    <div class="badge-float b2">
+      <span class="bdot" style="background:#f59e0b"></span>Opened in Tokyo 2 min ago
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS -->
+<div class="logos">
+  <span class="logos-label">Used at</span>
+  <div class="logos-scroll">
+    <span>Google</span><span>Deloitte</span><span>Shopify</span><span>Stripe</span>
+    <span>LVMH</span><span>Samsung</span><span>Nestlé</span><span>Airbus</span>
+    <span>Google</span><span>Deloitte</span><span>Shopify</span><span>Stripe</span>
+    <span>LVMH</span><span>Samsung</span><span>Nestlé</span><span>Airbus</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="section-label">How it works</div>
+  <h2>Three steps to never run out of cards again</h2>
+  <p class="section-sub">No design skills needed. No app for the recipient. Works for a street vendor in Tunis or a VP in New York.</p>
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">01</span>
+      <div class="step-icon">✦</div>
+      <h3>Claim your link</h3>
+      <p>Sign up and choose your unique URL in seconds. card.io/yourname is yours forever — or use your custom domain.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <div class="step-icon">◈</div>
+      <h3>Build your card</h3>
+      <p>Add your photo, contact details, social links, portfolio, and a bio. Choose a theme that matches your brand. Takes 3 minutes.</p>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <div class="step-icon">⬡</div>
+      <h3>Share anywhere</h3>
+      <p>Share via QR code, WhatsApp, email signature, or NFC. Anyone who opens the link can save your contact in one tap.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES BENTO -->
+<section class="section" id="features" style="padding-top:0">
+  <div class="section-label">Features</div>
+  <h2>Everything your paper card never had</h2>
+  <p class="section-sub">A living identity that updates in real time, works in every country, and tells you who's interested.</p>
+  <div class="bento">
+    <div class="bento-card wide">
+      <span class="bento-icon">◎</span>
+      <h3>Real-time analytics</h3>
+      <p>See exactly who viewed your card, where they're from, what they clicked, and when — all in a clean dashboard. Know which networking events actually worked.</p>
+    </div>
+    <div class="bento-card">
+      <span class="bento-icon">⊞</span>
+      <h3>QR code, always ready</h3>
+      <p>Download your QR in seconds. Put it on a name badge, packaging, an email signature, or a printed flyer.</p>
+    </div>
+    <div class="bento-card">
+      <span class="bento-icon">◐</span>
+      <h3>Dark & light themes</h3>
+      <p>6 curated color themes, or set your exact brand color. Your logo, your identity.</p>
+    </div>
+    <div class="bento-card accent-bg">
+      <div class="bento-stat">90+</div>
+      <h3>Countries</h3>
+      <p>Cards are viewed across 90 countries. Auto-detects the visitor's language.</p>
+    </div>
+    <div class="bento-card">
+      <span class="bento-icon">⬡</span>
+      <h3>Team cards</h3>
+      <p>Manage cards for your entire team from one dashboard. Unified branding, every employee.</p>
+    </div>
+    <div class="bento-card">
+      <span class="bento-icon">↯</span>
+      <h3>CRM integrations</h3>
+      <p>Every contact save syncs directly to HubSpot, Salesforce, or your Google Contacts.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label" style="color:var(--accent-light)">Pricing</div>
+  <h2>Simple, honest pricing</h2>
+  <p class="section-sub">Start free. Upgrade when you need more. Cancel anytime — no questions asked.</p>
+  <div class="plans">
+    <div class="plan">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-per">forever</div>
+      <ul class="plan-features">
+        <li>1 digital card</li>
+        <li>5 links</li>
+        <li>QR code download</li>
+        <li>Basic analytics</li>
+        <li>card.io/yourname URL</li>
+      </ul>
+      <button class="plan-btn">Get started</button>
+    </div>
+    <div class="plan featured">
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$7</div>
+      <div class="plan-per">per month</div>
+      <ul class="plan-features">
+        <li>Unlimited links</li>
+        <li>Custom domain</li>
+        <li>Full analytics + exports</li>
+        <li>Remove card.io branding</li>
+        <li>Custom theme colors</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="plan-btn">Start 14-day free trial</button>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Business</div>
+      <div class="plan-price">$25</div>
+      <div class="plan-per">per month · up to 25 people</div>
+      <ul class="plan-features">
+        <li>Everything in Pro</li>
+        <li>Team dashboard</li>
+        <li>Brand kit & templates</li>
+        <li>CRM integrations</li>
+        <li>SSO & admin controls</li>
+        <li>Dedicated onboarding</li>
+      </ul>
+      <button class="plan-btn">Contact sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-label">Stories</div>
+  <h2>People who never carry paper cards anymore</h2>
+  <p class="section-sub">From freelancers in Casablanca to enterprise teams in Singapore — card.io works everywhere.</p>
+  <div class="testi-grid">
+    <div class="testi">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"I gave out 200 paper cards at a conference in Dubai. Half had typos on my phone number. Now I just show my QR — and people save my contact on the spot."</p>
+      <div class="testi-author">
+        <div class="testi-av" style="background:#0C447C">SR</div>
+        <div>
+          <div class="testi-name">Sami Rachidi</div>
+          <div class="testi-title">Architect · Casablanca</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"We set up cards for our 18-person sales team in an afternoon. Every card has our brand. I can update anyone's info from the dashboard — no reprinting."</p>
+      <div class="testi-author">
+        <div class="testi-av" style="background:#3B6D11">LM</div>
+        <div>
+          <div class="testi-name">Lisa Müller</div>
+          <div class="testi-title">Head of Sales · Berlin</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"As a freelancer, my card is my portfolio, my contact form, and my brand — all in one link. I put it in every email I send and my inquiry rate went up 40%."</p>
+      <div class="testi-author">
+        <div class="testi-av" style="background:#854F0B">AN</div>
+        <div>
+          <div class="testi-name">Aiko Nakamura</div>
+          <div class="testi-title">UX Designer · Tokyo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="claim">
+  <h2>Your card is waiting for you</h2>
+  <p>Claim your link in 30 seconds. No credit card required.</p>
+  <div class="cta-input-row">
+    <span>card.io/</span>
+    <input type="text" placeholder="yourname" id="claim-slug" onkeypress="if(event.key==='Enter')claimCard()">
+    <button onclick="claimCard()">Claim free →</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="logo">card<span style="color:var(--accent-light)">.io</span></a>
+  <ul>
+    <li><a href="#">Product</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Blog</a></li>
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+  </ul>
+  <span>© 2026 Card.io</span>
+</footer>
+
+<script>
+function claimCard() {
+  const slug = document.getElementById('claim-slug').value.trim();
+  if (!slug) { document.getElementById('claim-slug').focus(); return; }
+  window.location.href = 'cardio-auth.html?slug=' + encodeURIComponent(slug);
+}
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
