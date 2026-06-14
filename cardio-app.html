@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>card.io — Digital Business Card for Professionals</title>
+<meta name="description" content="Create your digital business card in 3 minutes. Share via QR code, WhatsApp, or link. Works in Arabic and English. Free forever.">
+<meta name="keywords" content="digital business card, bطاقة رقمية, QR code, MENA, Arabic, professional">
+<meta property="og:title" content="card.io — Your identity, one link away">
+<meta property="og:description" content="Create your digital business card in 3 minutes. Share via QR, WhatsApp, or link.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cardio-hazel.vercel.app">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0a0a08">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪪</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;400;500&family=Noto+Sans+Arabic:wght@300;400;500&family=Cairo:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+/* ============================================================
+   DESIGN SYSTEM — Refined dark luxury with gold accents
+   ============================================================ */
+:root {
+  --ink:      #0a0a08;
+  --paper:    #f7f4ef;
+  --gold:     #c9a84c;
+  --gold-lt:  #e8c97a;
+  --gold-dk:  #9a7a2e;
+  --cream:    #faf8f3;
+  --slate:    #2a2a26;
+  --muted:    #7a7870;
+  --border:   rgba(10,10,8,0.1);
+  --border-lt: rgba(255,255,255,0.1);
+  --serif:    'DM Serif Display', serif;
+  --sans:     'DM Sans', sans-serif;
+  --arabic:   'Cairo', 'Noto Sans Arabic', sans-serif;
+  --r-sm:     8px;
+  --r-md:     12px;
+  --r-lg:     20px;
+  --r-xl:     28px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-lg: 0 24px 64px rgba(0,0,0,0.14);
+  --trans:    all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+[dir="rtl"] body { font-family: var(--arabic); }
+[dir="rtl"] .en-only { display: none !important; }
+[dir="ltr"] .ar-only { display: none !important; }
+
+/* ============================================================
+   SCREENS
+   ============================================================ */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
+
+/* ============================================================
+   LANDING SCREEN
+   ============================================================ */
+#screen-landing {
+  background: var(--ink);
+  color: var(--paper);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Grain texture */
+#screen-landing::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 0; opacity: .5;
+}
+
+/* Gold mesh background */
+#screen-landing::after {
+  content: '';
+  position: absolute;
+  top: -30%; right: -20%;
+  width: 70vw; height: 70vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 65%);
+  pointer-events: none; z-index: 0;
+}
+
+.landing-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 48px;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-lt);
+}
+.logo {
+  font-family: var(--serif); font-size: 22px;
+  color: var(--paper); text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.logo em { color: var(--gold); font-style: italic; }
+
+.nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+.nav-links a { font-size: 13px; color: rgba(255,255,255,0.55); text-decoration: none; transition: var(--trans); }
+.nav-links a:hover { color: var(--gold-lt); }
+
+.lang-switch-nav {
+  display: flex; gap: 0;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 40px; overflow: hidden;
+}
+.lang-switch-nav button {
+  padding: 6px 16px; font-size: 12px; font-weight: 500;
+  cursor: pointer; border: none; background: transparent;
+  color: rgba(255,255,255,0.45); transition: var(--trans);
+}
+.lang-switch-nav button.active {
+  background: var(--gold); color: var(--ink);
+}
+.lang-switch-nav button.ar-btn { font-family: var(--arabic); }
+
+.btn-nav {
+  background: var(--gold); color: var(--ink);
+  padding: 9px 24px; border-radius: 40px;
+  font-size: 13px; font-weight: 500; text-decoration: none;
+  transition: var(--trans); border: none; cursor: pointer;
+}
+.btn-nav:hover { background: var(--gold-lt); transform: translateY(-1px); }
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 120px 48px 80px;
+  gap: 64px;
+  position: relative; z-index: 1;
+}
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 500;
+  color: var(--gold); text-transform: uppercase; letter-spacing: .12em;
+  margin-bottom: 24px;
+}
+.hero-tag::before { content: ''; width: 20px; height: 1px; background: var(--gold); }
+
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(44px, 5.5vw, 72px);
+  line-height: 1.04; letter-spacing: -0.02em;
+  color: var(--paper); margin-bottom: 24px;
+}
+h1 em { color: var(--gold); font-style: italic; }
+
+[dir="rtl"] h1 { font-family: var(--arabic); font-size: clamp(36px, 4.5vw, 58px); line-height: 1.3; }
+[dir="rtl"] .hero-tag { flex-direction: row-reverse; }
+[dir="rtl"] .hero-tag::before { display: none; }
+[dir="rtl"] .hero-tag::after { content: ''; width: 20px; height: 1px; background: var(--gold); }
+
+.hero-sub {
+  font-size: 17px; color: rgba(255,255,255,0.55);
+  line-height: 1.75; font-weight: 300;
+  max-width: 440px; margin-bottom: 40px;
+}
+[dir="rtl"] .hero-sub { font-family: var(--arabic); line-height: 2; }
+
+.hero-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+[dir="rtl"] .hero-actions { flex-direction: row-reverse; }
+
+.btn-primary {
+  background: var(--gold); color: var(--ink);
+  padding: 14px 32px; border-radius: 40px;
+  font-size: 15px; font-weight: 500; text-decoration: none;
+  transition: var(--trans); border: none; cursor: pointer;
+  display: inline-block;
+}
+.btn-primary:hover { background: var(--gold-lt); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+
+.btn-ghost {
+  font-size: 14px; color: rgba(255,255,255,0.45);
+  text-decoration: none; display: flex; align-items: center; gap: 6px;
+  transition: var(--trans); background: none; border: none; cursor: pointer;
+}
+.btn-ghost:hover { color: var(--gold-lt); }
+[dir="rtl"] .btn-ghost { flex-direction: row-reverse; }
+
+.hero-trust {
+  margin-top: 48px; display: flex; align-items: center; gap: 12px;
+  font-size: 13px; color: rgba(255,255,255,0.35);
+}
+[dir="rtl"] .hero-trust { flex-direction: row-reverse; font-family: var(--arabic); }
+.trust-avs { display: flex; }
+.trust-avs span {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--ink); margin-left: -7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 500; color: var(--paper);
+}
+.trust-avs span:first-child { margin-left: 0; }
+
+/* Floating card */
+.hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+.float-card {
+  width: 270px;
+  background: var(--slate);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.06);
+  animation: heroFloat 5s ease-in-out infinite;
+  position: relative; z-index: 2;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+@keyframes heroFloat {
+  0%,100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-14px) rotate(-1.5deg); }
+}
+.fc-top {
+  background: linear-gradient(145deg, #1c3d6e 0%, #0d2a50 100%);
+  padding: 28px 20px 20px; text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.fc-av {
+  width: 62px; height: 62px; border-radius: 50%;
+  background: rgba(201,168,76,0.2); border: 2px solid rgba(201,168,76,0.4);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px; font-size: 18px; color: var(--gold);
+  font-family: var(--serif);
+}
+.fc-name { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 2px; }
+.fc-role { font-size: 11px; color: rgba(255,255,255,0.55); }
+.fc-body { padding: 14px; }
+.fc-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; margin-bottom: 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--r-sm);
+  font-size: 11px; color: rgba(255,255,255,0.65);
+}
+.fc-link i { font-size: 14px; color: var(--gold); }
+.fc-acts { display: flex; gap: 6px; margin-top: 10px; }
+.fc-save {
+  flex: 1; padding: 8px 0; background: var(--gold);
+  color: var(--ink); border: none; border-radius: var(--r-sm);
+  font-size: 11px; font-weight: 500; cursor: pointer;
+}
+.fc-share {
+  flex: 1; padding: 8px 0; background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-sm); font-size: 11px; cursor: pointer;
+}
+.float-badge {
+  position: absolute;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--r-md); padding: 10px 14px;
+  font-size: 12px; color: rgba(255,255,255,0.8);
+  display: flex; align-items: center; gap: 8px;
+}
+.float-badge.b1 { top: 8%; left: -5%; animation: floatB 6s ease-in-out infinite; }
+.float-badge.b2 { bottom: 18%; right: -8%; animation: floatB 7s ease-in-out infinite -2s; font-size: 11px; }
+@keyframes floatB { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.bdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* Features strip */
+.features-strip {
+  background: rgba(255,255,255,0.03);
+  border-top: 1px solid var(--border-lt);
+  border-bottom: 1px solid var(--border-lt);
+  padding: 24px 48px;
+  display: flex; gap: 48px; justify-content: center;
+  flex-wrap: wrap; position: relative; z-index: 1;
+}
+.feature-pill {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: rgba(255,255,255,0.45);
+}
+.feature-pill i { font-size: 18px; color: var(--gold); }
+[dir="rtl"] .feature-pill { flex-direction: row-reverse; font-family: var(--arabic); }
+
+/* Pricing section */
+.pricing-section {
+  padding: 96px 48px;
+  position: relative; z-index: 1;
+}
+.pricing-section h2 {
+  font-family: var(--serif); font-size: clamp(32px,4vw,50px);
+  letter-spacing: -0.02em; color: var(--paper);
+  margin-bottom: 8px;
+}
+[dir="rtl"] .pricing-section h2 { font-family: var(--arabic); }
+.pricing-sub { font-size: 16px; color: rgba(255,255,255,0.4); font-weight: 300; margin-bottom: 48px; }
+[dir="rtl"] .pricing-sub { font-family: var(--arabic); }
+.plans-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.plan {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-lg); padding: 28px;
+  transition: var(--trans);
+}
+.plan:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-3px); }
+.plan.featured { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+.plan-name { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; opacity: .6; margin-bottom: 16px; font-weight: 500; }
+.plan-price { font-family: var(--serif); font-size: 44px; margin-bottom: 4px; color: var(--paper); }
+.plan.featured .plan-price { color: var(--ink); }
+.plan-per { font-size: 13px; opacity: .55; margin-bottom: 24px; font-weight: 300; }
+.plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+.plan-features li { font-size: 13px; font-weight: 300; display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.75); }
+.plan.featured .plan-features li { color: var(--ink); }
+.plan-features li::before { content: '✓'; opacity: .7; }
+[dir="rtl"] .plan-features li { flex-direction: row-reverse; font-family: var(--arabic); }
+.plan-btn {
+  width: 100%; padding: 12px; border-radius: 40px;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent; color: var(--paper);
+  transition: var(--trans);
+}
+.plan-btn:hover { background: rgba(255,255,255,0.1); }
+.plan.featured .plan-btn { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.plan.featured .plan-btn:hover { background: var(--slate); }
+
+/* ============================================================
+   EDITOR SCREEN
+   ============================================================ */
+#screen-editor {
+  background: var(--paper);
+  display: none;
+}
+#screen-editor.active { display: grid; grid-template-columns: 1fr 340px; min-height: 100vh; }
+
+.editor-sidebar {
+  background: var(--ink);
+  padding: 0;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+  position: sticky; top: 0; height: 100vh;
+}
+
+.editor-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-lt);
+  flex-shrink: 0;
+}
+.editor-nav .logo { font-size: 18px; }
+
+.editor-tabs {
+  display: flex; border-bottom: 1px solid var(--border-lt);
+  flex-shrink: 0;
+}
+.editor-tab {
+  flex: 1; padding: 12px; font-size: 12px; font-weight: 500;
+  color: rgba(255,255,255,0.4); background: transparent;
+  border: none; cursor: pointer; transition: var(--trans);
+  border-bottom: 2px solid transparent;
+  text-align: center;
+}
+.editor-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+[dir="rtl"] .editor-tab { font-family: var(--arabic); }
+
+.editor-panel { padding: 20px 24px; flex: 1; overflow-y: auto; display: none; }
+.editor-panel.active { display: block; }
+
+.field-group { margin-bottom: 18px; }
+.field-label {
+  display: block; font-size: 11px; font-weight: 500;
+  color: rgba(255,255,255,0.4); text-transform: uppercase;
+  letter-spacing: .07em; margin-bottom: 6px;
+}
+[dir="rtl"] .field-label { font-family: var(--arabic); text-align: right; }
+.field-input {
+  width: 100%; padding: 9px 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-sm);
+  color: var(--paper); font-size: 13px;
+  font-family: var(--sans); transition: var(--trans);
+}
+.field-input:focus { outline: none; border-color: var(--gold); background: rgba(255,255,255,0.08); }
+.field-input::placeholder { color: rgba(255,255,255,0.25); }
+[dir="rtl"] .field-input { font-family: var(--arabic); text-align: right; }
+.field-input.ar-input { font-family: var(--arabic); text-align: right; direction: rtl; }
+textarea.field-input { resize: vertical; min-height: 64px; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.section-divider {
+  font-size: 11px; font-weight: 500;
+  color: rgba(255,255,255,0.25); text-transform: uppercase;
+  letter-spacing: .1em; margin: 20px 0 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+
+/* Theme picker */
+.theme-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.theme-swatch {
+  width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; transition: var(--trans);
+  position: relative;
+}
+.theme-swatch.active::after {
+  content: '✓'; position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #fff;
+}
+.theme-swatch:hover { transform: scale(1.15); }
+
+/* Links manager */
+.links-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.link-row {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-sm); padding: 8px 10px;
+}
+.link-row select {
+  flex: 0 0 88px; font-size: 12px; padding: 4px 6px;
+  border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.08); color: var(--paper);
+}
+.link-row input {
+  flex: 1; font-size: 12px; padding: 4px 8px;
+  border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06); color: var(--paper);
+  font-family: var(--sans);
+}
+.link-row input::placeholder { color: rgba(255,255,255,0.2); }
+.link-row button {
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.3); font-size: 16px;
+  transition: var(--trans); padding: 2px;
+}
+.link-row button:hover { color: #f87171; }
+.add-link-btn {
+  width: 100%; padding: 8px; font-size: 12px;
+  border: 1px dashed rgba(255,255,255,0.15); border-radius: var(--r-sm);
+  background: transparent; color: rgba(255,255,255,0.35);
+  cursor: pointer; transition: var(--trans);
+}
+.add-link-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Editor action buttons */
+.editor-actions {
+  padding: 16px 24px; border-top: 1px solid var(--border-lt);
+  display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;
+}
+.btn-publish {
+  width: 100%; padding: 12px; border-radius: 40px;
+  background: var(--gold); color: var(--ink);
+  font-size: 14px; font-weight: 500; border: none; cursor: pointer;
+  transition: var(--trans);
+}
+.btn-publish:hover { background: var(--gold-lt); }
+.btn-preview-link {
+  width: 100%; padding: 10px; border-radius: 40px;
+  background: transparent; color: rgba(255,255,255,0.45);
+  font-size: 13px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
+  transition: var(--trans);
+}
+.btn-preview-link:hover { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.75); }
+
+/* ============================================================
+   CARD PREVIEW (editor right panel)
+   ============================================================ */
+.preview-panel {
+  background: #f0ede7;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  padding: 32px 24px;
+  overflow-y: auto;
+}
+
+.preview-label {
+  font-size: 11px; color: var(--muted); text-align: center;
+  margin-bottom: 16px; text-transform: uppercase; letter-spacing: .08em;
+}
+
+.card-phone {
+  width: 260px;
+  background: var(--ink);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.cp-header {
+  padding: 28px 18px 20px; text-align: center;
+  transition: background .3s;
+}
+.cp-avatar {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 500; margin: 0 auto 12px;
+  border: 2.5px solid rgba(255,255,255,0.25);
+  color: #fff; transition: background .3s;
+  font-family: var(--serif);
+}
+[dir="rtl"] .cp-avatar { font-family: var(--arabic); }
+.cp-name { font-size: 16px; font-weight: 500; color: #fff; margin-bottom: 2px; }
+.cp-title { font-size: 11px; color: rgba(255,255,255,0.65); margin-bottom: 2px; }
+.cp-company { font-size: 11px; color: rgba(255,255,255,0.45); }
+[dir="rtl"] .cp-name,
+[dir="rtl"] .cp-title,
+[dir="rtl"] .cp-company { font-family: var(--arabic); }
+
+.cp-body { padding: 14px; direction: ltr; }
+.cp-body.rtl { direction: rtl; }
+
+.cp-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 10px; margin-bottom: 6px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-sm);
+  transition: var(--trans);
+}
+.cp-link.rtl-link { flex-direction: row-reverse; text-align: right; }
+.cp-link-icon { font-size: 15px; color: var(--gold); flex-shrink: 0; }
+.cp-link-label { font-size: 10px; color: rgba(255,255,255,0.35); display: block; }
+.cp-link-val { font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.8); }
+
+.cp-acts { display: flex; gap: 6px; margin-top: 10px; }
+.cp-acts.rtl { flex-direction: row-reverse; }
+.cp-save {
+  flex: 1; padding: 9px 0; border: none;
+  border-radius: var(--r-sm); color: var(--ink);
+  font-size: 11px; font-weight: 500; cursor: pointer;
+  transition: var(--trans); background: var(--gold);
+}
+.cp-share {
+  flex: 1; padding: 9px 0;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-sm);
+  color: rgba(255,255,255,0.6); font-size: 11px; cursor: pointer;
+}
+.cp-wa {
+  width: 100%; margin-top: 8px; padding: 9px;
+  background: #25D366; color: #fff; border: none;
+  border-radius: var(--r-sm); font-size: 11px; font-weight: 500;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; gap: 6px;
+}
+[dir="rtl"] .cp-wa { flex-direction: row-reverse; font-family: var(--arabic); }
+
+/* Lead capture form on card */
+.cp-lead {
+  margin-top: 10px; padding: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-sm);
+}
+.cp-lead-title {
+  font-size: 11px; color: rgba(255,255,255,0.45);
+  margin-bottom: 8px; text-align: center;
+}
+[dir="rtl"] .cp-lead-title { font-family: var(--arabic); }
+.cp-lead input {
+  width: 100%; padding: 7px 10px; margin-bottom: 6px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px; font-size: 11px; color: var(--paper);
+  font-family: var(--sans);
+}
+[dir="rtl"] .cp-lead input { font-family: var(--arabic); direction: rtl; }
+.cp-lead-btn {
+  width: 100%; padding: 7px; border: none;
+  border-radius: 6px; font-size: 11px; font-weight: 500;
+  cursor: pointer; transition: var(--trans);
+}
+
+/* Analytics bar in preview */
+.preview-analytics {
+  width: 260px; margin-top: 16px;
+  background: var(--ink); border-radius: var(--r-lg);
+  padding: 14px; border: 1px solid rgba(0,0,0,0.1);
+}
+.analytics-title {
+  font-size: 11px; color: var(--muted); margin-bottom: 12px;
+  text-transform: uppercase; letter-spacing: .07em;
+}
+.analytics-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.analytics-stat { text-align: center; }
+.analytics-num { font-family: var(--serif); font-size: 22px; color: var(--gold); display: block; }
+.analytics-label { font-size: 10px; color: rgba(255,255,255,0.35); }
+
+.url-bar {
+  width: 260px; margin-top: 10px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 40px; padding: 8px 16px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--muted);
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.url-bar i { font-size: 14px; color: #22c55e; }
+.url-bar span { flex: 1; }
+.url-copy { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 14px; }
+
+/* ============================================================
+   PUBLIC CARD SCREEN
+   ============================================================ */
+#screen-card {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px 16px 60px;
+  position: relative;
+}
+
+.card-bg {
+  position: fixed; inset: 0;
+  background: linear-gradient(160deg, #0d2030 0%, #0a0a08 50%, #1a1208 100%);
+  z-index: 0;
+}
+.card-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.public-card {
+  width: 100%; max-width: 380px;
+  background: var(--slate);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.06);
+  position: relative; z-index: 1;
+  animation: cardIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.pc-header {
+  padding: 36px 24px 24px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.pc-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.15) 0%, transparent 70%);
+}
+.pc-lang-toggle {
+  position: absolute; top: 14px; right: 14px;
+  display: flex; border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px; overflow: hidden;
+}
+[dir="rtl"] .pc-lang-toggle { right: auto; left: 14px; }
+.pc-lang-btn {
+  padding: 4px 12px; font-size: 10px; font-weight: 500;
+  background: transparent; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.4); transition: var(--trans);
+}
+.pc-lang-btn.active { background: var(--gold); color: var(--ink); }
+.pc-lang-btn.ar-btn { font-family: var(--arabic); }
+
+.pc-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  margin: 0 auto 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 500;
+  border: 3px solid rgba(201,168,76,0.4);
+  color: var(--gold); position: relative; z-index: 1;
+  font-family: var(--serif);
+}
+.pc-name { font-size: 20px; font-weight: 500; color: #fff; margin-bottom: 4px; position: relative; z-index: 1; }
+.pc-title { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 4px; position: relative; z-index: 1; }
+.pc-company { font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 10px; position: relative; z-index: 1; }
+.pc-bio {
+  font-size: 13px; color: rgba(255,255,255,0.45);
+  line-height: 1.7; font-weight: 300; position: relative; z-index: 1;
+  max-width: 280px; margin: 0 auto;
+}
+[dir="rtl"] .pc-name, [dir="rtl"] .pc-title, [dir="rtl"] .pc-company, [dir="rtl"] .pc-bio {
+  font-family: var(--arabic); line-height: 1.9;
+}
+
+.pc-body { padding: 20px 20px 0; }
+
+.pc-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; margin-bottom: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--r-md);
+  text-decoration: none; transition: var(--trans);
+  cursor: pointer;
+}
+.pc-link:hover { background: rgba(255,255,255,0.08); border-color: rgba(201,168,76,0.3); transform: translateX(3px); }
+[dir="rtl"] .pc-link { flex-direction: row-reverse; }
+[dir="rtl"] .pc-link:hover { transform: translateX(-3px); }
+.pc-link-icon {
+  width: 36px; height: 36px; border-radius: var(--r-sm);
+  background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--gold); flex-shrink: 0;
+}
+.pc-link-info { flex: 1; min-width: 0; }
+.pc-link-label { font-size: 10px; color: rgba(255,255,255,0.35); display: block; margin-bottom: 1px; }
+.pc-link-val { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 400; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+[dir="rtl"] .pc-link-label, [dir="rtl"] .pc-link-val { font-family: var(--arabic); text-align: right; }
+
+.pc-actions { padding: 16px 20px; display: flex; gap: 8px; }
+[dir="rtl"] .pc-actions { flex-direction: row-reverse; }
+.pc-save {
+  flex: 1; padding: 12px 0;
+  background: var(--gold); color: var(--ink);
+  border: none; border-radius: 40px;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: var(--trans);
+}
+.pc-save:hover { background: var(--gold-lt); }
+.pc-share {
+  flex: 1; padding: 12px 0;
+  background: transparent; color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 40px; font-size: 13px; cursor: pointer;
+  transition: var(--trans);
+}
+.pc-share:hover { border-color: rgba(255,255,255,0.3); }
+
+.pc-wa {
+  margin: 0 20px 16px; width: calc(100% - 40px);
+  padding: 12px; background: #25D366; color: #fff;
+  border: none; border-radius: 40px;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: var(--trans);
+}
+.pc-wa:hover { background: #1da851; }
+[dir="rtl"] .pc-wa { flex-direction: row-reverse; font-family: var(--arabic); }
+
+/* Lead capture on public card */
+.pc-lead {
+  margin: 0 20px 16px; padding: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--r-md);
+}
+.pc-lead-title {
+  font-size: 12px; color: rgba(255,255,255,0.4);
+  text-align: center; margin-bottom: 12px;
+}
+[dir="rtl"] .pc-lead-title { font-family: var(--arabic); }
+.pc-lead-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.pc-lead input {
+  flex: 1; padding: 9px 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-sm); font-size: 12px; color: var(--paper);
+  font-family: var(--sans); transition: var(--trans);
+}
+.pc-lead input:focus { outline: none; border-color: var(--gold); }
+[dir="rtl"] .pc-lead input { font-family: var(--arabic); direction: rtl; }
+.pc-lead-submit {
+  width: 100%; padding: 10px; border: none;
+  border-radius: var(--r-sm); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: var(--trans);
+  background: var(--gold); color: var(--ink);
+}
+.pc-lead-submit:hover { background: var(--gold-lt); }
+
+.pc-footer {
+  padding: 16px 20px 20px; text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4px;
+}
+.pc-footer a {
+  font-size: 11px; color: rgba(255,255,255,0.2);
+  text-decoration: none; transition: var(--trans);
+}
+.pc-footer a:hover { color: var(--gold); }
+.pc-qr-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; margin-bottom: 12px;
+}
+.pc-qr-box {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: rgba(255,255,255,0.3);
+}
+.pc-qr-text { font-size: 10px; color: rgba(255,255,255,0.3); line-height: 1.5; }
+
+/* ============================================================
+   ANALYTICS SCREEN
+   ============================================================ */
+#screen-analytics {
+  background: var(--paper); padding: 32px 40px;
+}
+.analytics-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 32px;
+}
+.analytics-header h1 { font-family: var(--serif); font-size: 32px; }
+[dir="rtl"] .analytics-header h1 { font-family: var(--arabic); }
+.back-btn {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--muted);
+  background: none; border: none; cursor: pointer;
+  transition: var(--trans);
+}
+.back-btn:hover { color: var(--ink); }
+
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 32px; }
+.stat-card {
+  background: var(--ink); color: var(--paper);
+  border-radius: var(--r-lg); padding: 20px;
+}
+.stat-num { font-family: var(--serif); font-size: 36px; color: var(--gold); display: block; margin-bottom: 4px; }
+.stat-label { font-size: 12px; color: rgba(255,255,255,0.4); }
+.stat-change { font-size: 11px; color: #22c55e; margin-top: 4px; display: block; }
+
+.chart-area {
+  background: var(--ink); border-radius: var(--r-lg);
+  padding: 24px; margin-bottom: 24px;
+}
+.chart-title { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.6); margin-bottom: 20px; }
+.bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 120px; }
+.bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+.bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--gold); opacity: 0.7; min-height: 4px; transition: var(--trans); }
+.bar:hover { opacity: 1; }
+.bar-label { font-size: 9px; color: rgba(255,255,255,0.3); }
+
+.leads-table { background: var(--ink); border-radius: var(--r-lg); padding: 20px; }
+.table-title { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.6); margin-bottom: 16px; }
+.lead-row-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px; color: rgba(255,255,255,0.7);
+}
+.lead-row-item:last-child { border-bottom: none; }
+.lead-time { font-size: 11px; color: rgba(255,255,255,0.3); }
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--ink); color: var(--paper);
+  padding: 12px 24px; border-radius: 40px;
+  font-size: 13px; font-weight: 500;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: transform .3s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 9999; display: flex; align-items: center; gap: 8px;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast i { color: var(--gold); }
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+@media (max-width: 768px) {
+  .landing-nav { padding: 16px 20px; }
+  .hero { grid-template-columns: 1fr; padding: 100px 20px 60px; gap: 40px; }
+  .hero-visual { display: none; }
+  .plans-grid { grid-template-columns: 1fr; }
+  .features-strip { padding: 20px; gap: 20px; }
+  #screen-editor.active { grid-template-columns: 1fr; }
+  .preview-panel { display: none; }
+  .stats-row { grid-template-columns: repeat(2,1fr); }
+  #screen-analytics { padding: 20px; }
+}
+
+.pulse { animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     LANDING SCREEN
+     ============================================================ -->
+<div id="screen-landing" class="screen active">
+  <nav class="landing-nav">
+    <a href="#" class="logo">card<em>.io</em></a>
+    <ul class="nav-links">
+      <li><a href="#pricing-section" class="en-only">Pricing</a></li>
+      <li><a href="#pricing-section" class="ar-only">الأسعار</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="lang-switch-nav">
+        <button class="active" onclick="setAppLang('en')">EN</button>
+        <button class="ar-btn" onclick="setAppLang('ar')">ع</button>
+      </div>
+      <button class="btn-nav" onclick="showScreen('editor')">
+        <span class="en-only">Create your card</span>
+        <span class="ar-only">أنشئ بطاقتك</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <div class="hero-tag">
+        <span class="en-only">The future of networking</span>
+        <span class="ar-only">مستقبل التواصل المهني</span>
+      </div>
+      <h1>
+        <span class="en-only">Your identity,<br><em>one link</em> away</span>
+        <span class="ar-only">هويتك،<br><em>رابط واحد</em> يكفي</span>
+      </h1>
+      <p class="hero-sub">
+        <span class="en-only">One smart link replaces every paper card you've ever handed out. Update it once — everyone who has your link sees it instantly. Works across 90+ countries.</span>
+        <span class="ar-only">رابط ذكي واحد يغني عن كل بطاقة ورقية سلّمتها من قبل. حدّثه مرة واحدة ويراه الجميع فوراً. يعمل في أكثر من 90 دولة.</span>
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="window.location.href='cardio-auth.html'">
+          <span class="en-only">Claim card.io/yourname →</span>
+          <span class="ar-only">← احجز card.io/اسمك</span>
+        </button>
+        <button class="btn-ghost" onclick="showScreen('card')">
+          <span class="en-only">See a live example →</span>
+          <span class="ar-only">← شاهد مثالاً حياً</span>
+        </button>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-avs">
+          <span style="background:#1c3d6e">AK</span>
+          <span style="background:#27500A">MB</span>
+          <span style="background:#854F0B">SR</span>
+          <span style="background:#72243E">TN</span>
+        </div>
+        <span class="en-only">Trusted by <strong>40,000+</strong> professionals in 90 countries</span>
+        <span class="ar-only">يثق بها أكثر من <strong>40,000</strong> محترف في 90 دولة</span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="float-badge b1">
+        <span class="bdot" style="background:#22c55e"></span>
+        <span class="en-only">312 saves this month</span>
+        <span class="ar-only">312 حفظ هذا الشهر</span>
+      </div>
+      <div class="float-card">
+        <div class="fc-top">
+          <div class="fc-av">AK</div>
+          <div class="fc-name">Amira Khalil</div>
+          <div class="fc-role">Creative Director · Dubai</div>
+        </div>
+        <div class="fc-body">
+          <div class="fc-link"><i class="ti ti-mail"></i> amira@studiok.ae</div>
+          <div class="fc-link"><i class="ti ti-world"></i> studiok.ae</div>
+          <div class="fc-link"><i class="ti ti-brand-whatsapp"></i> +971 50 123 4567</div>
+          <div class="fc-acts">
+            <button class="fc-save">Save contact</button>
+            <button class="fc-share">Share</button>
+          </div>
+        </div>
+      </div>
+      <div class="float-badge b2">
+        <span class="bdot" style="background:#f59e0b"></span>
+        <span class="en-only">Opened in Cairo 2m ago</span>
+        <span class="ar-only">فُتح في القاهرة منذ دقيقتين</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES STRIP -->
+  <div class="features-strip">
+    <div class="feature-pill"><i class="ti ti-language"></i><span class="en-only">Arabic + English bilingual</span><span class="ar-only">ثنائي اللغة عربي وإنجليزي</span></div>
+    <div class="feature-pill"><i class="ti ti-brand-whatsapp"></i><span class="en-only">WhatsApp-first sharing</span><span class="ar-only">مشاركة عبر واتساب</span></div>
+    <div class="feature-pill"><i class="ti ti-qrcode"></i><span class="en-only">QR code included</span><span class="ar-only">رمز QR مدمج</span></div>
+    <div class="feature-pill"><i class="ti ti-chart-bar"></i><span class="en-only">Live analytics</span><span class="ar-only">تحليلات مباشرة</span></div>
+    <div class="feature-pill"><i class="ti ti-credit-card"></i><span class="en-only">NFC physical cards</span><span class="ar-only">بطاقات NFC مادية</span></div>
+    <div class="feature-pill"><i class="ti ti-users"></i><span class="en-only">Team management</span><span class="ar-only">إدارة الفريق</span></div>
+  </div>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing-section">
+    <p class="section-label" style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);font-weight:500;margin-bottom:12px">
+      <span class="en-only">Pricing</span><span class="ar-only">الأسعار</span>
+    </p>
+    <h2>
+      <span class="en-only">Simple, honest pricing</span>
+      <span class="ar-only">أسعار واضحة وبسيطة</span>
+    </h2>
+    <p class="pricing-sub">
+      <span class="en-only">Start free. Upgrade when you're ready.</span>
+      <span class="ar-only">ابدأ مجاناً. طوّر اشتراكك حين تكون مستعداً.</span>
+    </p>
+    <div class="plans-grid">
+      <div class="plan">
+        <div class="plan-name"><span class="en-only">Free</span><span class="ar-only">مجاني</span></div>
+        <div class="plan-price">$0</div>
+        <div class="plan-per"><span class="en-only">forever</span><span class="ar-only">للأبد</span></div>
+        <ul class="plan-features">
+          <li><span class="en-only">1 digital card</span><span class="ar-only">بطاقة رقمية واحدة</span></li>
+          <li><span class="en-only">5 links</span><span class="ar-only">5 روابط</span></li>
+          <li><span class="en-only">QR code download</span><span class="ar-only">تحميل رمز QR</span></li>
+          <li><span class="en-only">Basic analytics</span><span class="ar-only">تحليلات أساسية</span></li>
+          <li><span class="en-only">Arabic + English</span><span class="ar-only">عربي + إنجليزي</span></li>
+        </ul>
+        <button class="plan-btn" onclick="window.location.href='cardio-auth.html'">
+          <span class="en-only">Get started free</span><span class="ar-only">ابدأ مجاناً</span>
+        </button>
+      </div>
+      <div class="plan featured">
+        <div class="plan-name"><span class="en-only">Pro</span><span class="ar-only">احترافي</span></div>
+        <div class="plan-price">$7</div>
+        <div class="plan-per"><span class="en-only">/ month · (~30 TND)</span><span class="ar-only">/ شهر · (~30 دينار)</span></div>
+        <ul class="plan-features">
+          <li><span class="en-only">Unlimited links</span><span class="ar-only">روابط غير محدودة</span></li>
+          <li><span class="en-only">Custom domain</span><span class="ar-only">نطاق مخصص</span></li>
+          <li><span class="en-only">Full analytics + exports</span><span class="ar-only">تحليلات كاملة</span></li>
+          <li><span class="en-only">Lead capture form</span><span class="ar-only">نموذج التقاط العملاء</span></li>
+          <li><span class="en-only">Remove card.io branding</span><span class="ar-only">إزالة علامة card.io</span></li>
+          <li><span class="en-only">WhatsApp analytics</span><span class="ar-only">تحليلات واتساب</span></li>
+        </ul>
+        <button class="plan-btn" onclick="window.location.href='cardio-auth.html'">
+          <span class="en-only">Start 14-day trial</span><span class="ar-only">جرّب 14 يوماً مجاناً</span>
+        </button>
+      </div>
+      <div class="plan">
+        <div class="plan-name"><span class="en-only">Business</span><span class="ar-only">الأعمال</span></div>
+        <div class="plan-price">$25</div>
+        <div class="plan-per"><span class="en-only">/ month · up to 25 people</span><span class="ar-only">/ شهر · حتى 25 شخص</span></div>
+        <ul class="plan-features">
+          <li><span class="en-only">Everything in Pro</span><span class="ar-only">كل مزايا الاحترافي</span></li>
+          <li><span class="en-only">Team dashboard</span><span class="ar-only">لوحة تحكم الفريق</span></li>
+          <li><span class="en-only">Brand kit + templates</span><span class="ar-only">حزمة الهوية البصرية</span></li>
+          <li><span class="en-only">CRM integrations</span><span class="ar-only">تكامل مع أنظمة CRM</span></li>
+          <li><span class="en-only">NFC physical cards</span><span class="ar-only">بطاقات NFC مادية</span></li>
+          <li><span class="en-only">Dedicated onboarding</span><span class="ar-only">دعم تأهيل مخصص</span></li>
+        </ul>
+        <button class="plan-btn">
+          <span class="en-only">Contact sales</span><span class="ar-only">تواصل مع المبيعات</span>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================================================
+     EDITOR SCREEN
+     ============================================================ -->
+<div id="screen-editor" class="screen">
+  <!-- Sidebar (editor) -->
+  <div class="editor-sidebar">
+    <div class="editor-nav">
+      <a href="#" class="logo" onclick="showScreen('landing');return false">card<em style="color:var(--gold)">.</em>io</a>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="lang-switch-nav">
+          <button id="ed-btn-en" class="active" onclick="setAppLang('en')">EN</button>
+          <button id="ed-btn-ar" class="ar-btn" onclick="setAppLang('ar')">ع</button>
+        </div>
+        <button onclick="signOut()" title="Sign out" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.35);font-size:18px;padding:4px" title="Sign out">⏻</button>
+      </div>
+    </div>
+
+    <div class="editor-tabs">
+      <button class="editor-tab active" onclick="switchTab('profile')">
+        <span class="en-only">Profile</span><span class="ar-only">الملف</span>
+      </button>
+      <button class="editor-tab" onclick="switchTab('links')">
+        <span class="en-only">Links</span><span class="ar-only">الروابط</span>
+      </button>
+      <button class="editor-tab" onclick="switchTab('design')">
+        <span class="en-only">Design</span><span class="ar-only">التصميم</span>
+      </button>
+    </div>
+
+    <!-- Profile Tab -->
+    <div class="editor-panel active" id="tab-profile">
+      <div class="section-divider"><span class="en-only">English info</span><span class="ar-only">المعلومات بالإنجليزية</span></div>
+      <div class="field-group"><label class="field-label"><span class="en-only">Display name</span><span class="ar-only">الاسم</span></label><input class="field-input" id="f-name-en" value="" oninput="updatePreview()"></div>
+      <div class="grid-2">
+        <div class="field-group"><label class="field-label"><span class="en-only">Job title</span><span class="ar-only">المسمى</span></label><input class="field-input" id="f-title-en" value="" oninput="updatePreview()"></div>
+        <div class="field-group"><label class="field-label"><span class="en-only">Company</span><span class="ar-only">الشركة</span></label><input class="field-input" id="f-company-en" value="" oninput="updatePreview()"></div>
+      </div>
+      <div class="field-group"><label class="field-label">Bio (EN)</label><textarea class="field-input" id="f-bio-en" oninput="updatePreview()"></textarea></div>
+
+      <div class="section-divider"><span class="en-only">Arabic info</span><span class="ar-only">المعلومات بالعربية</span></div>
+      <div class="field-group"><label class="field-label"><span class="en-only">Name (Arabic)</span><span class="ar-only">الاسم بالعربية</span></label><input class="field-input ar-input" id="f-name-ar" value="" oninput="updatePreview()"></div>
+      <div class="grid-2">
+        <div class="field-group"><label class="field-label"><span class="en-only">Title (AR)</span><span class="ar-only">المسمى</span></label><input class="field-input ar-input" id="f-title-ar" value="" oninput="updatePreview()"></div>
+        <div class="field-group"><label class="field-label"><span class="en-only">Company (AR)</span><span class="ar-only">الشركة</span></label><input class="field-input ar-input" id="f-company-ar" value="" oninput="updatePreview()"></div>
+      </div>
+      <div class="field-group"><label class="field-label"><span class="en-only">Bio (AR)</span><span class="ar-only">النبذة</span></label><textarea class="field-input ar-input" id="f-bio-ar" oninput="updatePreview()"></textarea></div>
+
+      <div class="section-divider"><span class="en-only">Location & URL</span><span class="ar-only">الموقع والرابط</span></div>
+      <div class="grid-2">
+        <div class="field-group"><label class="field-label"><span class="en-only">Location</span><span class="ar-only">المدينة</span></label><input class="field-input" id="f-location" value="" oninput="updatePreview()"></div>
+        <div class="field-group"><label class="field-label">card.io/<span class="en-only">slug</span><span class="ar-only">المعرّف</span></label><input class="field-input" id="f-slug" value="" oninput="updatePreview()"></div>
+      </div>
+    </div>
+
+    <!-- Links Tab -->
+    <div class="editor-panel" id="tab-links">
+      <div class="section-divider"><span class="en-only">Your links</span><span class="ar-only">روابطك</span></div>
+      <div class="links-list" id="links-list"></div>
+      <button class="add-link-btn" onclick="addLink()">
+        <i class="ti ti-plus"></i>
+        <span class="en-only"> Add link</span><span class="ar-only"> أضف رابطاً</span>
+      </button>
+      <div class="section-divider" style="margin-top:20px"><span class="en-only">Lead capture</span><span class="ar-only">التقاط العملاء</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0">
+        <span style="font-size:13px;color:rgba(255,255,255,0.6)"><span class="en-only">Show lead form on card</span><span class="ar-only">إظهار نموذج العملاء</span></span>
+        <label style="position:relative;display:inline-block;width:40px;height:22px;cursor:pointer">
+          <input type="checkbox" id="lead-toggle" style="opacity:0;width:0;height:0" checked onchange="updatePreview()">
+          <span id="toggle-track" style="position:absolute;inset:0;background:var(--gold);border-radius:22px;transition:.3s"></span>
+          <span id="toggle-thumb" style="position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.3s"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Design Tab -->
+    <div class="editor-panel" id="tab-design">
+      <div class="section-divider"><span class="en-only">Theme color</span><span class="ar-only">لون الثيم</span></div>
+      <div class="theme-grid" id="theme-grid"></div>
+
+      <div class="section-divider" style="margin-top:20px"><span class="en-only">Card style</span><span class="ar-only">نمط البطاقة</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="style-grid">
+        <div class="style-opt active" data-style="classic" onclick="setStyle('classic')" style="border:1px solid var(--gold);border-radius:var(--r-sm);padding:10px;cursor:pointer;text-align:center;font-size:12px;color:rgba(255,255,255,0.7)"><span class="en-only">Classic</span><span class="ar-only">كلاسيكي</span></div>
+        <div class="style-opt" data-style="minimal" onclick="setStyle('minimal')" style="border:1px solid rgba(255,255,255,0.1);border-radius:var(--r-sm);padding:10px;cursor:pointer;text-align:center;font-size:12px;color:rgba(255,255,255,0.4)"><span class="en-only">Minimal</span><span class="ar-only">مبسّط</span></div>
+      </div>
+    </div>
+
+    <div class="editor-actions">
+      <button class="btn-publish" id="publish-btn" onclick="publishCard()">
+        <span id="publish-spinner" style="display:none;width:16px;height:16px;border:2px solid rgba(0,0,0,0.3);border-top-color:#000;border-radius:50%;animation:spin .7s linear infinite;margin-right:6px"></span>
+        <i class="ti ti-rocket" id="publish-icon"></i>
+        <span class="en-only"> Publish card</span><span class="ar-only"> نشر البطاقة</span>
+      </button>
+      <button class="btn-preview-link" onclick="previewCard()">
+        <i class="ti ti-eye"></i>
+        <span class="en-only"> Preview as visitor</span><span class="ar-only"> معاينة كزائر</span>
+      </button>
+      <button class="btn-preview-link" onclick="showScreen('analytics')">
+        <i class="ti ti-chart-bar"></i>
+        <span class="en-only"> View analytics</span><span class="ar-only"> عرض التحليلات</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Preview panel -->
+  <div class="preview-panel">
+    <p class="preview-label"><span class="en-only">Live preview</span><span class="ar-only">معاينة مباشرة</span></p>
+
+    <div class="url-bar">
+      <i class="ti ti-lock"></i>
+      <span id="prev-url-bar">card.io/amira.ben</span>
+      <button class="url-copy" onclick="copyUrl()" title="Copy URL"><i class="ti ti-copy"></i></button>
+    </div>
+
+    <div style="margin-top:12px">
+      <div class="card-phone">
+        <div class="cp-header" id="prev-header" style="background:#0C447C">
+          <div class="cp-avatar" id="prev-avatar" style="background:#1a5fa0">AB</div>
+          <div class="cp-name" id="prev-name">Amira Ben Salah</div>
+          <div class="cp-title" id="prev-title">Product Designer</div>
+          <div class="cp-company" id="prev-company">Nexova Studio</div>
+        </div>
+        <div class="cp-body" id="prev-body">
+          <div id="prev-links-container"></div>
+          <div class="cp-acts" id="prev-acts">
+            <button class="cp-save" id="prev-save-btn" style="background:#0C447C"><span class="en-only">Save contact</span><span class="ar-only">حفظ جهة الاتصال</span></button>
+            <button class="cp-share"><span class="en-only">Share</span><span class="ar-only">مشاركة</span></button>
+          </div>
+          <button class="cp-wa" onclick="showToast('Opening WhatsApp...')">
+            <i class="ti ti-brand-whatsapp"></i>
+            <span class="en-only">Share on WhatsApp</span><span class="ar-only">مشاركة عبر واتساب</span>
+          </button>
+          <div class="cp-lead" id="prev-lead">
+            <div class="cp-lead-title"><span class="en-only">👋 Connect with me</span><span class="ar-only">👋 تواصل معي</span></div>
+            <input class="field-input" style="margin-bottom:6px;font-size:11px;padding:6px 10px" placeholder="Your name / اسمك">
+            <input class="field-input" style="margin-bottom:8px;font-size:11px;padding:6px 10px" placeholder="Your email / بريدك">
+            <button class="cp-lead-btn" style="background:var(--gold);color:var(--ink)"><span class="en-only">Send</span><span class="ar-only">إرسال</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-analytics">
+      <div class="analytics-title"><span class="en-only">This month</span><span class="ar-only">هذا الشهر</span></div>
+      <div class="analytics-grid">
+        <div class="analytics-stat"><span class="analytics-num">2.4k</span><span class="analytics-label"><span class="en-only">Views</span><span class="ar-only">مشاهدات</span></span></div>
+        <div class="analytics-stat"><span class="analytics-num">312</span><span class="analytics-label"><span class="en-only">Saves</span><span class="ar-only">حفظ</span></span></div>
+        <div class="analytics-stat"><span class="analytics-num">89</span><span class="analytics-label"><span class="en-only">Leads</span><span class="ar-only">عملاء</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PUBLIC CARD SCREEN
+     ============================================================ -->
+<div id="screen-card" class="screen">
+  <div class="card-bg"></div>
+
+  <div class="public-card">
+    <div class="pc-header" id="pc-header" style="background:linear-gradient(145deg,#1c3d6e,#0d2a50)">
+      <div class="pc-lang-toggle">
+        <button class="pc-lang-btn active" onclick="setCardLang('en')">EN</button>
+        <button class="pc-lang-btn ar-btn" onclick="setCardLang('ar')">ع</button>
+      </div>
+      <div class="pc-avatar" id="pc-avatar" style="background:rgba(201,168,76,0.15)">AB</div>
+      <div class="pc-name" id="pc-name">Amira Ben Salah</div>
+      <div class="pc-title" id="pc-title">Product Designer</div>
+      <div class="pc-company" id="pc-company">Nexova Studio · Tunis</div>
+      <div class="pc-bio" id="pc-bio">Designing products people love. Open to freelance opportunities.</div>
+    </div>
+
+    <div class="pc-body" id="pc-body-links"></div>
+
+    <div class="pc-actions">
+      <button class="pc-save" onclick="saveContact()">
+        <i class="ti ti-address-book"></i>
+        <span class="en-only"> Save contact</span><span class="ar-only"> حفظ جهة الاتصال</span>
+      </button>
+      <button class="pc-share" onclick="shareCard()">
+        <i class="ti ti-share"></i>
+        <span class="en-only"> Share</span><span class="ar-only"> مشاركة</span>
+      </button>
+    </div>
+
+    <button class="pc-wa" onclick="whatsappShare()">
+      <i class="ti ti-brand-whatsapp"></i>
+      <span id="pc-wa-label"><span class="en-only">Share on WhatsApp</span><span class="ar-only">مشاركة عبر واتساب</span></span>
+    </button>
+
+    <div class="pc-lead">
+      <div class="pc-lead-title">
+        <span class="en-only">👋 Want to connect? Leave your details</span>
+        <span class="ar-only">👋 هل تريد التواصل؟ اترك بياناتك</span>
+      </div>
+      <div class="pc-lead-row">
+        <input id="lead-visitor-name" placeholder="Your name / اسمك">
+        <input id="lead-visitor-email" placeholder="Email / البريد">
+      </div>
+      <button class="pc-lead-submit" onclick="submitLead()">
+        <span class="en-only">Connect →</span><span class="ar-only">← تواصل</span>
+      </button>
+    </div>
+
+    <div class="pc-footer">
+      <div class="pc-qr-row">
+        <div class="pc-qr-box"><i class="ti ti-qrcode"></i></div>
+        <div class="pc-qr-text">
+          <span class="en-only">Scan to open this card</span><span class="ar-only">امسح لفتح البطاقة</span><br>
+          <span style="color:rgba(255,255,255,0.5)" id="pc-slug">card.io/amira.ben</span>
+        </div>
+      </div>
+      <a href="#" onclick="showScreen('landing');return false">
+        <span class="en-only">Powered by card.io — Create yours free</span>
+        <span class="ar-only">مدعوم من card.io — أنشئ بطاقتك مجاناً</span>
+      </a>
+    </div>
+  </div>
+
+  <div style="position:relative;z-index:1;margin-top:16px">
+    <button onclick="showScreen('editor')" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5);padding:8px 20px;border-radius:40px;font-size:12px;cursor:pointer;transition:var(--trans)" onmouseover="this.style.color='rgba(255,255,255,0.9)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'">
+      <span class="en-only">← Back to editor</span><span class="ar-only">→ العودة للمحرر</span>
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================
+     ANALYTICS SCREEN
+     ============================================================ -->
+<div id="screen-analytics" class="screen">
+  <div class="analytics-header">
+    <div>
+      <h1><span class="en-only">Analytics</span><span class="ar-only">التحليلات</span></h1>
+      <p style="font-size:13px;color:var(--muted);margin-top:4px"><span class="en-only">card.io/amira.ben — Last 30 days</span><span class="ar-only">card.io/amira.ben — آخر 30 يوم</span></p>
+    </div>
+    <button class="back-btn" onclick="showScreen('editor')">
+      <i class="ti ti-arrow-left"></i>
+      <span class="en-only">Back to editor</span><span class="ar-only">العودة</span>
+    </button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-num">2,431</span>
+      <span class="stat-label"><span class="en-only">Card views</span><span class="ar-only">مشاهدات البطاقة</span></span>
+      <span class="stat-change">↑ 18% vs last month</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">312</span>
+      <span class="stat-label"><span class="en-only">Contact saves</span><span class="ar-only">حفظ جهات الاتصال</span></span>
+      <span class="stat-change">↑ 24%</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">89</span>
+      <span class="stat-label"><span class="en-only">Leads captured</span><span class="ar-only">عملاء محتملون</span></span>
+      <span class="stat-change">↑ 41%</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">147</span>
+      <span class="stat-label"><span class="en-only">WhatsApp taps</span><span class="ar-only">نقرات واتساب</span></span>
+      <span class="stat-change">↑ 32%</span>
+    </div>
+  </div>
+
+  <div class="chart-area">
+    <div class="chart-title"><span class="en-only">Daily views — last 14 days</span><span class="ar-only">المشاهدات اليومية — آخر 14 يوم</span></div>
+    <div class="bar-chart" id="bar-chart"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="leads-table">
+      <div class="table-title"><span class="en-only">Recent leads</span><span class="ar-only">آخر العملاء المحتملين</span></div>
+      <div class="lead-row-item"><div><div style="font-weight:500">Mohamed Tounsi</div><div style="font-size:11px;color:var(--muted)">m.tounsi@gmail.com</div></div><span class="lead-time">2h ago</span></div>
+      <div class="lead-row-item"><div><div style="font-weight:500">Sara Al-Rashid</div><div style="font-size:11px;color:var(--muted)">sara@business.ae</div></div><span class="lead-time">5h ago</span></div>
+      <div class="lead-row-item"><div><div style="font-weight:500">Karim Benali</div><div style="font-size:11px;color:var(--muted)">k.benali@outlook.com</div></div><span class="lead-time">1d ago</span></div>
+      <div class="lead-row-item"><div><div style="font-weight:500">Nour Hassan</div><div style="font-size:11px;color:var(--muted)">nour@startup.eg</div></div><span class="lead-time">1d ago</span></div>
+      <div class="lead-row-item"><div><div style="font-weight:500">Youssef Mansour</div><div style="font-size:11px;color:var(--muted)">y.mansour@corp.ma</div></div><span class="lead-time">2d ago</span></div>
+    </div>
+    <div class="leads-table">
+      <div class="table-title"><span class="en-only">Top countries</span><span class="ar-only">أكثر الدول مشاهدةً</span></div>
+      <div class="lead-row-item"><div>🇹🇳 <span class="en-only">Tunisia</span><span class="ar-only">تونس</span></div><div style="display:flex;align-items:center;gap:8px"><div style="width:80px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden"><div style="width:65%;height:100%;background:var(--gold);border-radius:3px"></div></div><span class="lead-time">34%</span></div></div>
+      <div class="lead-row-item"><div>🇸🇦 <span class="en-only">Saudi Arabia</span><span class="ar-only">السعودية</span></div><div style="display:flex;align-items:center;gap:8px"><div style="width:80px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden"><div style="width:22%;height:100%;background:var(--gold);border-radius:3px"></div></div><span class="lead-time">22%</span></div></div>
+      <div class="lead-row-item"><div>🇦🇪 <span class="en-only">UAE</span><span class="ar-only">الإمارات</span></div><div style="display:flex;align-items:center;gap:8px"><div style="width:80px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden"><div style="width:15%;height:100%;background:var(--gold);border-radius:3px"></div></div><span class="lead-time">15%</span></div></div>
+      <div class="lead-row-item"><div>🇲🇦 <span class="en-only">Morocco</span><span class="ar-only">المغرب</span></div><div style="display:flex;align-items:center;gap:8px"><div style="width:80px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden"><div style="width:12%;height:100%;background:var(--gold);border-radius:3px"></div></div><span class="lead-time">12%</span></div></div>
+      <div class="lead-row-item"><div>🇪🇬 <span class="en-only">Egypt</span><span class="ar-only">مصر</span></div><div style="display:flex;align-items:center;gap:8px"><div style="width:80px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden"><div style="width:10%;height:100%;background:var(--gold);border-radius:3px"></div></div><span class="lead-time">10%</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toast-msg">Done!</span></div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let appLang = 'en';
+let cardLang = 'en';
+let activeTheme = 0;
+
+const THEMES = [
+  { name:'Ocean',  header:'linear-gradient(145deg,#1c3d6e,#0d2a50)', btn:'#185FA5', av:'rgba(28,61,110,0.6)' },
+  { name:'Gold',   header:'linear-gradient(145deg,#3d2a0a,#1a1208)',  btn:'#9a7a2e', av:'rgba(61,42,10,0.6)' },
+  { name:'Forest', header:'linear-gradient(145deg,#1a3a0f,#0f2208)',  btn:'#3B6D11', av:'rgba(26,58,15,0.6)' },
+  { name:'Dusk',   header:'linear-gradient(145deg,#2a1a5e,#16093a)',  btn:'#534AB7', av:'rgba(42,26,94,0.6)' },
+  { name:'Ember',  header:'linear-gradient(145deg,#4a1a08,#280e04)',  btn:'#854F0B', av:'rgba(74,26,8,0.6)' },
+  { name:'Rose',   header:'linear-gradient(145deg,#4a0f25,#280814)',  btn:'#993556', av:'rgba(74,15,37,0.6)' },
+];
+const THEME_COLORS = ['#1c3d6e','#3d2a0a','#1a3a0f','#2a1a5e','#4a1a08','#4a0f25'];
+
+const LINK_ICONS = {
+  email:'ti-mail', phone:'ti-phone', whatsapp:'ti-brand-whatsapp',
+  website:'ti-world', linkedin:'ti-brand-linkedin',
+  instagram:'ti-brand-instagram', twitter:'ti-brand-x',
+  youtube:'ti-brand-youtube', github:'ti-brand-github', calendar:'ti-calendar'
+};
+const LINK_LABELS = {
+  en: { email:'Email', phone:'Phone', whatsapp:'WhatsApp', website:'Website', linkedin:'LinkedIn', instagram:'Instagram', twitter:'X / Twitter', youtube:'YouTube', github:'GitHub', calendar:'Book a meeting' },
+  ar: { email:'البريد الإلكتروني', phone:'الهاتف', whatsapp:'واتساب', website:'الموقع', linkedin:'لينكدإن', instagram:'انستغرام', twitter:'إكس / تويتر', youtube:'يوتيوب', github:'جيتهاب', calendar:'احجز اجتماعاً' }
+};
+
+let links = [
+  { type:'email',    val:'' },
+  { type:'phone',    val:'' },
+  { type:'whatsapp', val:'' },
+];
+
+// ============================================================
+// LANGUAGE
+// ============================================================
+function setAppLang(lang) {
+  appLang = lang;
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  document.querySelectorAll('.lang-switch-nav button').forEach((b,i) => {
+    b.classList.toggle('active', (i===0 && lang==='en') || (i===1 && lang==='ar'));
+  });
+  updatePreview();
+  renderLinks();
+  renderThemes();
+}
+
+function setCardLang(lang) {
+  cardLang = lang;
+  document.querySelectorAll('.pc-lang-btn').forEach((b,i) => {
+    b.classList.toggle('active', (i===0&&lang==='en')||(i===1&&lang==='ar'));
+  });
+  updatePublicCard();
+}
+
+// ============================================================
+// SCREENS
+// ============================================================
+function showScreen(id) {
+  console.log('showScreen called with:', id);
+  // Hide all screens first
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
+  const target = document.getElementById('screen-'+id);
+  if (!target) { console.error('Screen not found:', id); return; }
+  target.classList.add('active');
+  // Force correct display type per screen
+  if (id === 'editor') target.style.display = 'grid';
+  else if (id === 'landing') target.style.display = 'block';
+  else if (id === 'card') target.style.display = 'flex';
+  else if (id === 'analytics') target.style.display = 'block';
+  else target.style.display = 'block';
+  // Hide/show landing nav
+  const nav = document.querySelector('.landing-nav');
+  if (nav) nav.style.display = id === 'landing' ? 'flex' : 'none';
+  if (id === 'analytics') { renderBarChart(); if(typeof loadAnalytics==='function') loadAnalytics(); }
+  if (id === 'card') { updatePublicCard(); if(typeof trackView==='function'&&_currentCardId) trackView(_currentCardId); }
+  if (id === 'editor') { updatePreview(); renderLinks(); renderThemes(); }
+  window.scrollTo(0,0);
+}
+
+
+// ============================================================
+// TABS
+// ============================================================
+function switchTab(tab) {
+  document.querySelectorAll('.editor-tab').forEach((t,i) => {
+    t.classList.toggle('active', ['profile','links','design'][i] === tab);
+  });
+  document.querySelectorAll('.editor-panel').forEach((p,i) => {
+    p.classList.toggle('active', ['tab-profile','tab-links','tab-design'][i] === 'tab-'+tab);
+  });
+}
+
+// ============================================================
+// THEMES
+// ============================================================
+function renderThemes() {
+  const g = document.getElementById('theme-grid');
+  if (!g) return;
+  g.innerHTML = THEMES.map((t,i) => `
+    <div class="theme-swatch${i===activeTheme?' active':''}"
+      style="background:${THEME_COLORS[i]}"
+      title="${t.name}"
+      onclick="setTheme(${i})"></div>`).join('');
+}
+
+function setTheme(i) {
+  activeTheme = i;
+  renderThemes();
+  updatePreview();
+  updatePublicCard();
+}
+
+// ============================================================
+// STYLE
+// ============================================================
+function setStyle(s) {
+  document.querySelectorAll('.style-opt').forEach(el => {
+    const isActive = el.dataset.style === s;
+    el.style.borderColor = isActive ? 'var(--gold)' : 'rgba(255,255,255,0.1)';
+    el.style.color = isActive ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)';
+  });
+}
+
+// ============================================================
+// LINKS MANAGER
+// ============================================================
+function renderLinks() {
+  const c = document.getElementById('links-list');
+  if (!c) return;
+  c.innerHTML = links.map((l,i) => `
+    <div class="link-row">
+      <select onchange="links[${i}].type=this.value;updatePreview();renderLinks()">
+        ${Object.keys(LINK_ICONS).map(k=>`<option value="${k}"${l.type===k?' selected':''}>${k}</option>`).join('')}
+      </select>
+      <input value="${l.val}" oninput="links[${i}].val=this.value;updatePreview()"
+        placeholder="${l.type === 'whatsapp' ? '+216...' : 'value'}">
+      <button onclick="links.splice(${i},1);renderLinks();updatePreview()" aria-label="Remove">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>`).join('');
+}
+
+function addLink() {
+  links.push({ type:'email', val:'' });
+  renderLinks();
+}
+
+function getInitials(name) {
+  return name.split(/\s+/).map(w=>w[0]||'').join('').slice(0,2).toUpperCase() || '?';
+}
+
+// ============================================================
+// PREVIEW UPDATE
+// ============================================================
+function updatePreview() {
+  const lang = appLang;
+  const isAR = lang === 'ar';
+  const t = THEMES[activeTheme];
+  const name = document.getElementById(`f-name-${lang}`)?.value || 'Your Name';
+  const title = document.getElementById(`f-title-${lang}`)?.value || '';
+  const company = document.getElementById(`f-company-${lang}`)?.value || '';
+  const slug = document.getElementById('f-slug')?.value || 'yourname';
+  const showLead = document.getElementById('lead-toggle')?.checked;
+
+  // Header
+  const header = document.getElementById('prev-header');
+  if (header) header.style.background = t.header;
+  const saveBtn = document.getElementById('prev-save-btn');
+  if (saveBtn) saveBtn.style.background = t.btn;
+
+  const av = document.getElementById('prev-avatar');
+  if (av) {
+    av.textContent = getInitials(name);
+    av.style.background = t.av;
+    av.style.fontFamily = isAR ? 'var(--arabic)' : 'var(--serif)';
+  }
+
+  const pname = document.getElementById('prev-name');
+  if (pname) { pname.textContent = name; pname.style.fontFamily = isAR ? 'var(--arabic)' : ''; }
+  const ptitle = document.getElementById('prev-title');
+  if (ptitle) { ptitle.textContent = title; ptitle.style.fontFamily = isAR ? 'var(--arabic)' : ''; }
+  const pcomp = document.getElementById('prev-company');
+  if (pcomp) { pcomp.textContent = company; pcomp.style.fontFamily = isAR ? 'var(--arabic)' : ''; }
+
+  // URL bar
+  const urlBar = document.getElementById('prev-url-bar');
+  if (urlBar) urlBar.textContent = `card.io/${slug}`;
+
+  // Body direction
+  const body = document.getElementById('prev-body');
+  if (body) { body.style.direction = isAR ? 'rtl' : 'ltr'; body.style.fontFamily = isAR ? 'var(--arabic)' : ''; }
+  const acts = document.getElementById('prev-acts');
+  if (acts) acts.style.flexDirection = isAR ? 'row-reverse' : 'row';
+
+  // Links
+  const lc = document.getElementById('prev-links-container');
+  if (lc) {
+    lc.innerHTML = links.filter(l=>l.val).map(l => {
+      const icon = LINK_ICONS[l.type] || 'ti-link';
+      const label = LINK_LABELS[lang][l.type] || l.type;
+      const rtlClass = isAR ? 'rtl-link' : '';
+      return `<div class="cp-link ${rtlClass}">
+        <i class="ti ${icon} cp-link-icon"></i>
+        <div style="min-width:0;flex:1;text-align:${isAR?'right':'left'}">
+          <span class="cp-link-label" style="font-family:${isAR?'var(--arabic)':''}">${label}</span>
+          <span class="cp-link-val" dir="ltr">${l.val}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Lead form visibility
+  const leadEl = document.getElementById('prev-lead');
+  if (leadEl) leadEl.style.display = showLead ? 'block' : 'none';
+
+  // Toggle thumb
+  const thumb = document.getElementById('toggle-thumb');
+  const track = document.getElementById('toggle-track');
+  if (thumb && track) {
+    if (showLead) { thumb.style.left = '21px'; track.style.background = 'var(--gold)'; }
+    else { thumb.style.left = '3px'; track.style.background = 'rgba(255,255,255,0.15)'; }
+  }
+}
+
+// ============================================================
+// PUBLIC CARD UPDATE
+// ============================================================
+function updatePublicCard() {
+  const lang = cardLang;
+  const isAR = lang === 'ar';
+  const t = THEMES[activeTheme];
+
+  const nameKey = `f-name-${lang}`;
+  const name = document.getElementById(nameKey)?.value || (lang==='ar'?'أميرة بن صالح':'Amira Ben Salah');
+  const title = document.getElementById(`f-title-${lang}`)?.value || (lang==='ar'?'مصممة منتجات':'Product Designer');
+  const company = document.getElementById(`f-company-${lang}`)?.value || (lang==='ar'?'نيكسوفا ستوديو':'Nexova Studio');
+  const bio = document.getElementById(`f-bio-${lang}`)?.value || '';
+  const slug = document.getElementById('f-slug')?.value || 'yourname';
+  const location = document.getElementById('f-location')?.value || 'Tunis, TN';
+
+  const pcHeader = document.getElementById('pc-header');
+  if (pcHeader) pcHeader.style.background = t.header;
+
+  const pcAv = document.getElementById('pc-avatar');
+  if (pcAv) {
+    pcAv.textContent = getInitials(name);
+    pcAv.style.fontFamily = isAR ? 'var(--arabic)' : 'var(--serif)';
+  }
+
+  const setEl = (id, txt, ar) => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = txt; el.style.fontFamily = ar ? 'var(--arabic)' : ''; el.style.direction = ar ? 'rtl' : 'ltr'; }
+  };
+  setEl('pc-name', name, isAR);
+  setEl('pc-title', title, isAR);
+  setEl('pc-company', `${company} · ${location}`, isAR);
+  setEl('pc-bio', bio, isAR);
+
+  const slug_el = document.getElementById('pc-slug');
+  if (slug_el) slug_el.textContent = `card.io/${slug}`;
+
+  // Links on public card
+  const bodyLinks = document.getElementById('pc-body-links');
+  if (bodyLinks) {
+    bodyLinks.style.direction = isAR ? 'rtl' : 'ltr';
+    bodyLinks.innerHTML = links.filter(l=>l.val).map(l => {
+      const icon = LINK_ICONS[l.type] || 'ti-link';
+      const label = LINK_LABELS[lang][l.type] || l.type;
+      return `<div class="pc-link" style="flex-direction:${isAR?'row-reverse':'row'}" onclick="handleLinkClick('${l.type}','${l.val}')">
+        <div class="pc-link-icon"><i class="ti ${icon}"></i></div>
+        <div class="pc-link-info">
+          <span class="pc-link-label" style="font-family:${isAR?'var(--arabic)':''}; text-align:${isAR?'right':'left'}">${label}</span>
+          <span class="pc-link-val" dir="ltr" style="text-align:${isAR?'right':'left'}">${l.val}</span>
+        </div>
+        <i class="ti ti-chevron-right" style="color:rgba(255,255,255,0.2); transform:${isAR?'scaleX(-1)':'none'}; flex-shrink:0"></i>
+      </div>`;
+    }).join('');
+  }
+}
+
+function handleLinkClick(type, val) {
+  if (type === 'email') window.open(`mailto:${val}`);
+  else if (type === 'phone') window.open(`tel:${val}`);
+  else if (type === 'whatsapp') window.open(`https://wa.me/${val.replace(/\D/g,'')}`);
+  else if (type === 'linkedin') window.open(`https://linkedin.com/${val}`);
+  else if (type === 'website') window.open(`https://${val.replace(/^https?:\/\//,'')}`);
+  else showToast('Opening link...');
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+function whatsappShare() {
+  const slug = document.getElementById('f-slug')?.value || 'yourname';
+  const url = `card.io/${slug}`;
+  const lang = cardLang;
+  const msg = lang === 'ar'
+    ? `بطاقتي الرقمية: https://${url}`
+    : `My digital card: https://${url}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function saveContact() {
+  const lang = cardLang;
+  const name = document.getElementById(`f-name-${lang}`)?.value || 'Amira Ben Salah';
+  const phone = links.find(l=>l.type==='phone')?.val || '';
+  const email = links.find(l=>l.type==='email')?.val || '';
+  const website = links.find(l=>l.type==='website')?.val || '';
+  const vcf = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nURL:${website}\nEND:VCARD`;
+  const blob = new Blob([vcf], {type:'text/vcard'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `${name.replace(/\s/g,'_')}.vcf`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast(lang==='ar' ? 'تم حفظ جهة الاتصال ✓' : 'Contact saved! ✓');
+}
+
+function shareCard() {
+  const slug = document.getElementById('f-slug')?.value || 'yourname';
+  if (navigator.share) {
+    navigator.share({ title: 'Digital Card', url: `https://card.io/${slug}` });
+  } else {
+    navigator.clipboard.writeText(`https://card.io/${slug}`);
+    showToast(cardLang==='ar' ? 'تم نسخ الرابط ✓' : 'Link copied! ✓');
+  }
+}
+
+function copyUrl() {
+  const slug = document.getElementById('f-slug')?.value || 'yourname';
+  navigator.clipboard.writeText(`https://card.io/${slug}`);
+  showToast('URL copied!');
+}
+
+function submitLead() {
+  const name = document.getElementById('lead-visitor-name')?.value;
+  const email = document.getElementById('lead-visitor-email')?.value;
+  if (!name || !email) { showToast(cardLang==='ar' ? 'يرجى ملء جميع الحقول' : 'Please fill all fields'); return; }
+  document.getElementById('lead-visitor-name').value = '';
+  document.getElementById('lead-visitor-email').value = '';
+  showToast(cardLang==='ar' ? 'شكراً! تم إرسال طلبك ✓' : `Thanks ${name}! We'll be in touch ✓`);
+}
+
+function publishCard() {
+  showToast(appLang==='ar' ? 'تم نشر البطاقة! 🚀' : 'Card published! 🚀');
+  setTimeout(() => showScreen('card'), 800);
+}
+
+// ============================================================
+// ANALYTICS CHART
+// ============================================================
+function renderBarChart() {
+  const data = [42,58,35,71,89,63,44,95,78,112,88,67,103,120];
+  const labels = ['18','19','20','21','22','23','24','25','26','27','28','29','30','31'];
+  const max = Math.max(...data);
+  const c = document.getElementById('bar-chart');
+  if (!c) return;
+  c.innerHTML = data.map((v,i) => `
+    <div class="bar-wrap">
+      <div class="bar" style="height:${(v/max*100)}%;background:${i===data.length-1?'var(--gold)':'rgba(201,168,76,0.5)'}" title="${v} views"></div>
+      <div class="bar-label">${labels[i]}</div>
+    </div>`).join('');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  const m = document.getElementById('toast-msg');
+  m.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  renderThemes();
+  renderLinks();
+  updatePreview();
+
+  // Auto-detect browser language
+  const browserLang = (navigator.language || 'en').startsWith('ar') ? 'ar' : 'en';
+  // Default to 'en' for demo, uncomment below to auto-detect:
+  // setAppLang(browserLang);
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior:'smooth' }); }
+    });
+  });
+}
+
+init();
+
+// ============================================================
+// SUPABASE INTEGRATION
+// ============================================================
+const SB_URL_KEY = 'cardio_sb_url';
+const SB_KEY_KEY = 'cardio_sb_key';
+let _supabase = null;
+let _currentUser = null;
+let _currentCardId = null;
+
+// Hardcoded credentials
+const SUPABASE_URL = 'https://gfqhweetningrqycnsab.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmcWh3ZWV0bmluZ3JxeWNuc2FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NjcyMzAsImV4cCI6MjA5NDU0MzIzMH0.WRLKO7yVmVzq9NHMNaK-ac7kdoPek2t6ENajKugB4mY';
+
+function initDB() {
+  try {
+    const url = SUPABASE_URL;
+    const key = SUPABASE_ANON_KEY;
+    if (!url || !key) return false;
+    _supabase = window.supabase ? window.supabase.createClient(url, key) : null;
+    console.log('Supabase connected:', !!_supabase);
+    return !!_supabase;
+  } catch(e) { console.error('Supabase init failed', e); return false; }
+}
+
+// ── AUTH STATE ──────────────────────────────────────────────
+async function checkAuth() {
+  if (!_supabase) return;
+  try {
+    // Try active session first
+    let { data: { session } } = await _supabase.auth.getSession();
+
+    // Fallback: restore session from localStorage (set by cardio-auth.html)
+    if (!session) {
+      const stored = localStorage.getItem('cardio_session');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const { data } = await _supabase.auth.setSession({
+          access_token: parsed.access_token,
+          refresh_token: parsed.refresh_token
+        });
+        session = data.session;
+      }
+    }
+
+    if (session?.user) {
+      _currentUser = session.user;
+      const name = session.user.user_metadata?.full_name || session.user.email || '';
+      showToast('Welcome back ' + name + ' ✓');
+      // Remove login prompt if it exists
+      const prompt = document.getElementById('login-prompt');
+      if (prompt) prompt.remove();
+      await loadCardFromDB();
+    } else {
+      showLoginPrompt();
+    }
+  } catch(e) {
+    console.error('Auth check error:', e);
+    showLoginPrompt();
+  }
+}
+
+function showLoginPrompt() {
+  const actions = document.querySelector('.editor-actions');
+  if (!actions) return;
+  const banner = document.createElement('div');
+  banner.id = 'login-prompt';
+  banner.style.cssText = 'background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:12px;margin-bottom:8px;font-size:12px;color:rgba(255,255,255,0.7);text-align:center;line-height:1.7';
+  banner.innerHTML = `Not signed in — card won't be saved.<br>
+    <button onclick="window.open('cardio-auth.html','_blank')" style="color:var(--gold);background:none;border:none;cursor:pointer;font-size:12px;font-weight:500;text-decoration:underline;margin-top:4px">Sign in to save your card →</button>`;
+  actions.insertBefore(banner, actions.firstChild);
+}
+
+// ── SAVE CARD ────────────────────────────────────────────────
+async function publishCard() {
+  // Show loading state
+  const btn = document.getElementById('publish-btn');
+  const spinner = document.getElementById('publish-spinner');
+  const icon = document.getElementById('publish-icon');
+  if (btn) btn.disabled = true;
+  if (spinner) spinner.style.display = 'inline-block';
+  if (icon) icon.style.display = 'none';
+  if (!_supabase || !_currentUser) {
+    // Demo mode
+    const slug = document.getElementById('f-slug')?.value || 'yourname';
+    showToast(appLang === 'ar' ? 'تم نشر البطاقة! 🚀' : 'Card published! 🚀');
+    setTimeout(() => {
+      alert('🎉 Your card is live at card.io/' + slug + '\n\nIn production, this would save to your account and make the card publicly accessible.');
+    }, 300);
+    setTimeout(() => showScreen('card'), 800);
+    return;
+  }
+
+  showToast(appLang === 'ar' ? 'جاري الحفظ...' : 'Saving...');
+
+  const slug      = document.getElementById('f-slug')?.value?.trim() || 'card-' + Date.now();
+  const name_en   = document.getElementById('f-name-en')?.value || '';
+  const name_ar   = document.getElementById('f-name-ar')?.value || '';
+  const title_en  = document.getElementById('f-title-en')?.value || '';
+  const title_ar  = document.getElementById('f-title-ar')?.value || '';
+  const company_en= document.getElementById('f-company-en')?.value || '';
+  const company_ar= document.getElementById('f-company-ar')?.value || '';
+  const bio_en    = document.getElementById('f-bio-en')?.value || '';
+  const bio_ar    = document.getElementById('f-bio-ar')?.value || '';
+  const location  = document.getElementById('f-location')?.value || '';
+
+  try {
+    let cardData = {
+      user_id: _currentUser.id,
+      slug, name_en, name_ar, title_en, title_ar,
+      company_en, company_ar, bio_en, bio_ar,
+      location, theme_index: activeTheme,
+      is_published: true,
+      updated_at: new Date().toISOString()
+    };
+
+    let cardId;
+
+    if (_currentCardId) {
+      // Update existing card
+      const { error } = await _supabase
+        .from('cards')
+        .update(cardData)
+        .eq('id', _currentCardId);
+      if (error) throw error;
+      cardId = _currentCardId;
+    } else {
+      // Insert new card
+      const { data, error } = await _supabase
+        .from('cards')
+        .insert(cardData)
+        .select()
+        .single();
+      if (error) throw error;
+      cardId = data.id;
+      _currentCardId = cardId;
+    }
+
+    // Save links — delete old ones first, then insert fresh
+    await _supabase.from('card_links').delete().eq('card_id', cardId);
+    if (links.length > 0) {
+      const linkRows = links
+        .filter(l => l.val)
+        .map((l, i) => ({ card_id: cardId, type: l.type, value: l.val, sort_order: i }));
+      if (linkRows.length > 0) {
+        const { error } = await _supabase.from('card_links').insert(linkRows);
+        if (error) throw error;
+      }
+    }
+
+    showToast(appLang === 'ar' ? '🚀 تم نشر البطاقة!' : '🚀 Card published!');
+    setTimeout(() => showScreen('card'), 800);
+
+  } catch(err) {
+    console.error('Save error:', err);
+    if (err.message?.includes('duplicate') || err.message?.includes('unique')) {
+      showToast('❌ That URL slug is already taken — try a different one');
+    } else {
+      showToast('❌ Error: ' + err.message);
+    }
+  } finally {
+    // Reset loading state
+    if (btn) btn.disabled = false;
+    if (spinner) spinner.style.display = 'none';
+    if (icon) icon.style.display = 'inline';
+  }
+}
+
+// ── LOAD CARD ────────────────────────────────────────────────
+async function loadCardFromDB() {
+  if (!_supabase || !_currentUser) return;
+  try {
+    const { data: card, error } = await _supabase
+      .from('cards')
+      .select('*, card_links(*)')
+      .eq('user_id', _currentUser.id)
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error || !card) return; // No card yet — fresh user
+
+    _currentCardId = card.id;
+
+    // Fill in editor fields
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+    setVal('f-name-en',    card.name_en);
+    setVal('f-name-ar',    card.name_ar);
+    setVal('f-title-en',   card.title_en);
+    setVal('f-title-ar',   card.title_ar);
+    setVal('f-company-en', card.company_en);
+    setVal('f-company-ar', card.company_ar);
+    setVal('f-bio-en',     card.bio_en);
+    setVal('f-bio-ar',     card.bio_ar);
+    setVal('f-location',   card.location);
+    setVal('f-slug',       card.slug);
+
+    if (card.theme_index !== undefined) {
+      activeTheme = card.theme_index;
+      renderThemes();
+    }
+
+    // Load links
+    if (card.card_links && card.card_links.length > 0) {
+      links = card.card_links
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map(l => ({ type: l.type, val: l.value }));
+      renderLinks();
+    }
+
+    updatePreview();
+    showToast(appLang === 'ar' ? 'تم تحميل بطاقتك ✓' : 'Card loaded ✓');
+
+  } catch(err) {
+    console.error('Load error:', err);
+  }
+}
+
+// ── TRACK VIEW ───────────────────────────────────────────────
+async function trackView(cardId) {
+  if (!_supabase || !cardId) return;
+  try {
+    const device = /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
+    await _supabase.from('card_views').insert({ card_id: cardId, device });
+  } catch(e) { console.error('Track view error', e); }
+}
+
+// ── SAVE LEAD ────────────────────────────────────────────────
+async function submitLead() {
+  const name  = document.getElementById('lead-visitor-name')?.value?.trim();
+  const email = document.getElementById('lead-visitor-email')?.value?.trim();
+  if (!name || !email) {
+    showToast(cardLang === 'ar' ? 'يرجى ملء جميع الحقول' : 'Please fill all fields');
+    return;
+  }
+
+  if (_supabase && _currentCardId) {
+    try {
+      await _supabase.from('leads').insert({
+        card_id: _currentCardId,
+        visitor_name: name,
+        visitor_email: email
+      });
+    } catch(e) { console.error('Lead save error', e); }
+  }
+
+  document.getElementById('lead-visitor-name').value = '';
+  document.getElementById('lead-visitor-email').value = '';
+  showToast(cardLang === 'ar' ? `شكراً ${name}! سنتواصل معك ✓` : `Thanks ${name}! We'll be in touch ✓`);
+}
+
+// ── LOAD REAL ANALYTICS ──────────────────────────────────────
+async function loadAnalytics() {
+  if (!_supabase || !_currentCardId) return;
+  try {
+    // Views this month
+    const monthStart = new Date();
+    monthStart.setDate(1); monthStart.setHours(0,0,0,0);
+
+    const { count: viewCount } = await _supabase
+      .from('card_views')
+      .select('*', { count: 'exact', head: true })
+      .eq('card_id', _currentCardId)
+      .gte('viewed_at', monthStart.toISOString());
+
+    // Total leads
+    const { count: leadCount } = await _supabase
+      .from('leads')
+      .select('*', { count: 'exact', head: true })
+      .eq('card_id', _currentCardId);
+
+    // Recent leads
+    const { data: recentLeads } = await _supabase
+      .from('leads')
+      .select('*')
+      .eq('card_id', _currentCardId)
+      .order('captured_at', { ascending: false })
+      .limit(5);
+
+    // Update analytics dashboard numbers
+    const nums = document.querySelectorAll('.analytics-num');
+    if (nums[0]) nums[0].textContent = viewCount || 0;
+    if (nums[2]) nums[2].textContent = leadCount || 0;
+
+    // Update preview analytics
+    const prevNums = document.querySelectorAll('.analytics-stat .analytics-num');
+    if (prevNums[0]) prevNums[0].textContent = viewCount || 0;
+    if (prevNums[2]) prevNums[2].textContent = leadCount || 0;
+
+    // Fill recent leads table
+    if (recentLeads && recentLeads.length > 0) {
+      const leadsTable = document.querySelector('.leads-table');
+      if (leadsTable) {
+        leadsTable.innerHTML = '<div class="table-title">Recent leads</div>' +
+          recentLeads.map(l => {
+            const time = new Date(l.captured_at);
+            const timeStr = time.toLocaleDateString();
+            return `<div class="lead-row-item">
+              <div>
+                <div style="font-weight:500">${l.visitor_name}</div>
+                <div style="font-size:11px;color:var(--muted)">${l.visitor_email}</div>
+              </div>
+              <span class="lead-time">${timeStr}</span>
+            </div>`;
+          }).join('');
+      }
+    }
+
+  } catch(err) { console.error('Analytics error:', err); }
+}
+
+// ── Analytics and tracking hooks (no override needed) ────────
+// These are called directly inside showScreen above
+
+// ── ADD SUPABASE SDK ─────────────────────────────────────────
+(function loadSupabaseSDK() {
+  if (window.supabase) { initDB(); checkAuth(); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+  s.onload = () => { initDB(); checkAuth(); };
+  s.onerror = () => console.warn('Supabase SDK failed to load — running in demo mode');
+  document.head.appendChild(s);
+})();
+
+// expose to window
+// Sign out
+async function signOut() {
+  if (_supabase) await _supabase.auth.signOut();
+  localStorage.removeItem('cardio_session');
+  window.location.href = 'cardio-auth.html';
+}
+window.signOut = signOut;
+
+function previewCard() {
+  const slug = document.getElementById('f-slug')?.value?.trim();
+  if (!slug) { showToast('Please set your card URL slug first'); return; }
+  window.open(`card.html?slug=${slug}`, '_blank');
+}
+window.previewCard = previewCard;
+
+window.publishCard  = publishCard;
+window.submitLead   = submitLead;
+window.showScreen   = showScreen;
+window.setAppLang   = setAppLang;
+window.setCardLang  = setCardLang;
+window.switchTab    = switchTab;
+window.addLink      = addLink;
+window.setTheme     = setTheme;
+window.setStyle     = setStyle;
+window.copyUrl      = copyUrl;
+window.saveContact  = saveContact;
+window.shareCard    = shareCard;
+window.whatsappShare= whatsappShare;
+window.updatePreview= updatePreview;
+window.renderLinks  = renderLinks;
+window.renderThemes = renderThemes;
+
+</script>
+</body>
+</html>
